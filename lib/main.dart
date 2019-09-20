@@ -12,6 +12,9 @@ class SwiperView extends StatefulWidget {
 class _SwiperViewState extends State<SwiperView> {
   List<Widget> imgeList = List();
 
+  bool _switchSelected = true;
+  bool _checkboxSelected = true;
+
   @override
   void initState() {
     imgeList
@@ -36,8 +39,68 @@ class _SwiperViewState extends State<SwiperView> {
         title: Text("轮播图"),
       ),
       body: ListView(
-        children: <Widget>[firstSwiperView(2)],
-        
+        children: <Widget>[
+          //banner
+          firstSwiperView(2),
+
+          TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: "用户名",
+              hintText: "用户名和邮箱",
+              prefixIcon: Icon(Icons.person),
+            ),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              labelText: "密码",
+              hintText: "请输入登录密码",
+              prefixIcon: Icon(Icons.lock),
+            ),
+            obscureText: true,
+          ),
+
+          Switch(
+            value: _switchSelected,
+            activeColor: Colors.red,
+            onChanged: (value) {
+              setState(() {
+                _switchSelected = value;
+              });
+            },
+          ),
+          Checkbox(
+            value: _checkboxSelected,
+            activeColor: Colors.red,
+            onChanged: (value) {
+              setState(() {
+                _checkboxSelected = value;
+              });
+            },
+          ),
+
+          RaisedButton(
+            color: Colors.blue,
+            textColor: Colors.white,
+            highlightColor: Colors.blue[700],
+            colorBrightness: Brightness.dark,
+            splashColor: Colors.grey,
+            child: Text("订阅"),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            onPressed: () {},
+          ),
+
+          Image(
+            image: AssetImage("images/bg.png"),
+            width: 50,
+          ),
+          Image(
+            image: NetworkImage(
+                "https://julian.oss-cn-beijing.aliyuncs.com/zy/ZY新版 升级.png"),
+            width: 10,
+          ),
+        ],
       ),
     );
   }
@@ -53,22 +116,19 @@ class _SwiperViewState extends State<SwiperView> {
         pagination: SwiperPagination(
             alignment: Alignment.bottomRight,
             margin: const EdgeInsets.fromLTRB(0, 0, 20, 10),
+            builder: FractionPaginationBuilder(
+                color: Colors.white,
+                activeColor: Colors.redAccent,
+                activeFontSize: 20,
+                fontSize: 15)
 
-           builder: FractionPaginationBuilder(
-             color: Colors.white,
-             activeColor: Colors.redAccent,
-             activeFontSize: 20,
-               fontSize: 15
-           )
-
-
-           /* builder: DotSwiperPaginationBuilder(
+            /* builder: DotSwiperPaginationBuilder(
                 color: Colors.grey,
                 activeColor: Colors.white,
                 activeSize: 6,
                 space: 5,
                 size: 6)*/
-        ),
+            ),
         controller: SwiperController(),
         scrollDirection: Axis.horizontal,
         autoplay: true,
@@ -92,6 +152,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(title: "带参数跳转"),
       routes: <String, WidgetBuilder>{
         "/nameRoute": (BuildContext context) => new Echo(
@@ -178,7 +239,30 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                   });
                 },
-                child: new Text("跳转传参并返回值"))
+                child: new Text("跳转传参并返回值")),
+          CircularProgressIndicator(
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation(Colors.blue),
+          ),
+
+            SizedBox(
+              height: 3,
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+              ),
+            ),
+
+            SizedBox(
+
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation(Colors.blue),
+              ),
+            ),
+
+
+
           ],
         ),
       ),
@@ -282,10 +366,13 @@ class _TapboxAState extends State<TapboxA> {
             style: new TextStyle(fontSize: 32.0, color: Colors.white),
           ),
         ),
+
         width: 60.0,
         height: 30.0,
         decoration: new BoxDecoration(
             color: _active ? Colors.lightBlue[700] : Colors.grey[600]),
+
+
       ),
     );
   }
