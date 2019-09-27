@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:dio/dio.dart';
 
 void main() => runApp(MyApp());
+
+class MyRowView extends StatefulWidget {
+  @override
+  _MyRowViewState createState() => _MyRowViewState();
+}
+
+class _MyRowViewState extends State<MyRowView> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      height: 100,
+      width: 100,
+    );
+  }
+}
 
 class SwiperView extends StatefulWidget {
   @override
@@ -147,19 +166,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //应用名称
-      title: '首页',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: "知乎日报",
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: "带参数跳转"),
-      routes: <String, WidgetBuilder>{
-        "/nameRoute": (BuildContext context) => new Echo(
-              text: "嘻嘻",
-              backgroundColor: Colors.grey,
-            ),
-      },
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("知乎"),
+        ),
+
+        body: ListView.builder(
+          itemCount: 100,
+          itemBuilder: (context,index){
+            return MyHomeCell();
+          },
+        ),
+      ),
     );
   }
 }
@@ -205,7 +225,111 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new NewsListPageState();
+  }
+}
+
+class NewsListPageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: 100,
+        itemBuilder: (context, index) {
+          return MyHomeCell();
+        },
+      ),
+    );
+  }
+}
+
+class MyHomeCell extends StatelessWidget {
+
+
+
+  Widget get _cellContentView {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                '继山东编导艺考联考被曝疑似出现泄题和作弊的情况。江西编导艺考联考也被曝疑似出现泄题和作弊的情况。',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Color(0xff111111),
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Container(
+                width: 50.0,
+                height: 20.0,
+                margin: EdgeInsets.only(top: 6.0),
+                child: ButtonTheme(
+                  buttonColor: Color(0xff1C64CF),
+                  shape: StadiumBorder(),
+                  child: RaisedButton(
+                    onPressed: () => print('test'),
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      '知乎',
+                      style: TextStyle(
+                        fontSize: 11.0,
+                        fontWeight: FontWeight.w300,
+                        color:Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 10.0,
+        ),
+        Container(
+          height: 85.0,
+          width: 115.0,
+          margin: EdgeInsets.only(top: 3.0),
+          decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(5.0),
+              image: DecorationImage(
+                image: NetworkImage(
+                    "https://julian.oss-cn-beijing.aliyuncs.com/zy/ZY新版 升级.png"),
+                    fit: BoxFit.cover,
+              )),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      height: 115.0,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            child: _cellContentView,
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 4.0),
+            color: Color(0xffeaeaea),
+            constraints: BoxConstraints.expand(height: 4.0),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -218,52 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new FlatButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/nameRoute");
-                },
-                child: new Text("直接用name跳转")),
-            new FlatButton(
-                onPressed: () {
-                  Navigator.push<String>(context,
-                      new MaterialPageRoute(builder: (BuildContext context) {
-                    return new ThirdPage(title: "请输入昵称");
-                  })).then((String result) {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return new AlertDialog(
-                            content: new Text("输入的内容是:$result"),
-                          );
-                        });
-                  });
-                },
-                child: new Text("跳转传参并返回值")),
-          CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-            valueColor: AlwaysStoppedAnimation(Colors.blue),
-          ),
-
-            SizedBox(
-              height: 3,
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-              ),
-            ),
-
-            SizedBox(
-
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation(Colors.blue),
-              ),
-            ),
-
-
-
-          ],
+          children: <Widget>[],
         ),
       ),
     );
@@ -366,13 +445,10 @@ class _TapboxAState extends State<TapboxA> {
             style: new TextStyle(fontSize: 32.0, color: Colors.white),
           ),
         ),
-
         width: 60.0,
         height: 30.0,
         decoration: new BoxDecoration(
             color: _active ? Colors.lightBlue[700] : Colors.grey[600]),
-
-
       ),
     );
   }
@@ -504,7 +580,15 @@ class Echo extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Center(
+                widthFactor: 20,
+                heightFactor: 2,
+                child: Text("***"),
+              ),
+            ),
           ],
         ),
       ),
