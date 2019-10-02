@@ -1,9 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'dart:convert';
-
-import 'package:flutter_app/index/news_bean_entity.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:news/model/Api.dart';
+import 'package:news/model/info_entity.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class Page extends State<HomePage> {
   String dataStr = "";
   var _items = [];
+
 
   @override
   void initState() {
@@ -33,32 +34,49 @@ class Page extends State<HomePage> {
   Future getData() async {
     Response response;
     Dio dio = Dio();
-
-    response = await dio.get("https://news-at.zhihu.com/api/4/news/latest");
-
-
-    var data = response.data.toString();
-    print('返回数据: '+data);
-    if (data != null) {
-      Map body = json.decode(data.toString());
-      print(body);
-      NewsBeanEntity newsBeanEntity = NewsBeanEntity.fromJson(body);
-      print(newsBeanEntity);
-      // var newsBeanEntity = new  NewsBeanEntity.fromJson(newsMap);
-
-    }
+    response = await dio.get(Api.BaseUrl + Api.ARTICLE_LIST);
+    Map data = response.data;
+    print('返回数据: ' + data.toString());
+    InfoEntity infoEntity = InfoEntity.fromJson(data);
+    print("解析数据:" + infoEntity.date);
   }
-
-
 }
 
 Widget layout(BuildContext context) {
+
   return new Scaffold(
     appBar: new AppBar(
       title: const Text("主页"),
     ),
-    //body: ListView.builder(itemCount: _items.length, itemBuilder: itemView),
+    body: Container(
+      width: MediaQuery.of(context).size.width,
+      height: 180.0,
+      child: Swiper(
+        itemBuilder: _swiperBuilder,
+        itemCount: 3,
+        pagination: new SwiperPagination(
+          builder: DotSwiperPaginationBuilder(
+            color: Colors.grey,
+            activeColor: Colors.white,
+            size: 7.0,
+            activeSize: 9.0,
+          )
+        ),
+        control: new SwiperControl(),
+        scrollDirection: Axis.horizontal,
+        autoplay: true,
+        onTap: (index)=>print("点击了第$index个"),
+      ),
+    ),
   );
 }
 
-Widget itemView(BuildContext context, int index) {}
+Widget _swiperBuilder(BuildContext context, int index) {
+  return (Image.network(
+   "https://wanandroid.com/blogimgs/92d96db5-d951-4223-ac42-e13a62899f50.jpeg",
+    fit: BoxFit.fill,
+  ));
+
+
+
+}

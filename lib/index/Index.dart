@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/config/global_config.dart';
-import 'package:flutter_app/find/find_page.dart';
-import 'package:flutter_app/index/navigation_icon_view.dart';
-import 'package:flutter_app/home/home_page.dart';
+import 'package:news/config/global_config.dart';
+import 'package:news/find/find_page.dart';
+import 'package:news/home/home_page.dart';
+
+import 'navigation_icon_view.dart';
+
 
 class Index extends StatefulWidget{
 

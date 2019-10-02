@@ -1,17 +1,17 @@
-class NewsBeanEntity {
+class InfoEntity {
 	String date;
-	List<NewsBeanTopStory> topStories;
-	List<NewsBeanStory> stories;
+	List<InfoTopStory> topStories;
+	List<InfoStory> stories;
 
-	NewsBeanEntity({this.date, this.topStories, this.stories});
+	InfoEntity({this.date, this.topStories, this.stories});
 
-	NewsBeanEntity.fromJson(Map<String, dynamic> json) {
+	InfoEntity.fromJson(Map<String, dynamic> json) {
 		date = json['date'];
 		if (json['top_stories'] != null) {
-			topStories = new List<NewsBeanTopStory>();(json['top_stories'] as List).forEach((v) { topStories.add(new NewsBeanTopStory.fromJson(v)); });
+			topStories = new List<InfoTopStory>();(json['top_stories'] as List).forEach((v) { topStories.add(new InfoTopStory.fromJson(v)); });
 		}
 		if (json['stories'] != null) {
-			stories = new List<NewsBeanStory>();(json['stories'] as List).forEach((v) { stories.add(new NewsBeanStory.fromJson(v)); });
+			stories = new List<InfoStory>();(json['stories'] as List).forEach((v) { stories.add(new InfoStory.fromJson(v)); });
 		}
 	}
 
@@ -28,7 +28,7 @@ class NewsBeanEntity {
 	}
 }
 
-class NewsBeanTopStory {
+class InfoTopStory {
 	String image;
 	String hint;
 	String gaPrefix;
@@ -38,9 +38,9 @@ class NewsBeanTopStory {
 	int type;
 	String url;
 
-	NewsBeanTopStory({this.image, this.hint, this.gaPrefix, this.imageHue, this.id, this.title, this.type, this.url});
+	InfoTopStory({this.image, this.hint, this.gaPrefix, this.imageHue, this.id, this.title, this.type, this.url});
 
-	NewsBeanTopStory.fromJson(Map<String, dynamic> json) {
+	InfoTopStory.fromJson(Map<String, dynamic> json) {
 		image = json['image'];
 		hint = json['hint'];
 		gaPrefix = json['ga_prefix'];
@@ -65,7 +65,7 @@ class NewsBeanTopStory {
 	}
 }
 
-class NewsBeanStory {
+class InfoStory {
 	List<String> images;
 	String hint;
 	String gaPrefix;
@@ -75,9 +75,9 @@ class NewsBeanStory {
 	int type;
 	String url;
 
-	NewsBeanStory({this.images, this.hint, this.gaPrefix, this.imageHue, this.id, this.title, this.type, this.url});
+	InfoStory({this.images, this.hint, this.gaPrefix, this.imageHue, this.id, this.title, this.type, this.url});
 
-	NewsBeanStory.fromJson(Map<String, dynamic> json) {
+	InfoStory.fromJson(Map<String, dynamic> json) {
 		images = json['images']?.cast<String>();
 		hint = json['hint'];
 		gaPrefix = json['ga_prefix'];
