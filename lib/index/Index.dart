@@ -20,12 +20,16 @@ class _IndexState extends State<Index> {
       title: Text("资讯"),
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.perm_identity),
+      icon: Icon(Icons.crop_free),
+      title: Text("体系"),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person_pin),
       title: Text("我的"),
     ),
   ];
 
-  final bodyList = [HomePage(), FindPage(), HomePage(), FindPage()];
+  final bodyList = [HomePage(), FindPage(), HomePage(), FindPage(),HomePage()];
 
   final pageController = PageController();
   int currentIndex = 0;
@@ -45,16 +49,19 @@ class _IndexState extends State<Index> {
     // TODO: implement build
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-          items: items,
-          currentIndex: currentIndex,
-          onTap: onTap,
-          fixedColor: Colors.red,
-          type: BottomNavigationBarType.fixed),
+        items: items,
+        currentIndex: currentIndex,
+        onTap: onTap,
+        fixedColor: Colors.red,
+        type: BottomNavigationBarType.fixed,
+        selectedFontSize: 13.0,
+        unselectedFontSize: 12.0,
+      ),
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,
         children: bodyList,
-        physics: NeverScrollableScrollPhysics(),//不能左右滑动
+        physics: NeverScrollableScrollPhysics(), //不能左右滑动
       ),
     );
   }

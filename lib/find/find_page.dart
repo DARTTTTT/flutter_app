@@ -39,6 +39,7 @@ class Page extends State<FindPage> {
 Widget layout(BuildContext context) {
   return new Scaffold(
     appBar: new AppBar(
+      backgroundColor: Colors.red,
       title: const Text("发现"),
     ),
     //body: ListView.builder(itemCount: _items.length, itemBuilder: itemView),

@@ -5,6 +5,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/banner_entity.dart';
 
+import 'ItemInfoDetail.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -14,9 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
-
-
-
   var _items = [];
 
   @override
@@ -27,34 +26,74 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   Widget layout(BuildContext context) {
     return new Scaffold(
-      /*  appBar: new AppBar(
-      title: const Text("主页"),
-    ),*/
+      //沉浸式状态栏
+      /*appBar: new PreferredSize(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.red, Colors.red])),
+          child: SafeArea(child: Text("1212")),),
+        preferredSize: Size(double.infinity,10),
+        ),*/
+      body: ListView(
+        padding: EdgeInsets.only(top: 0), //设置可沉浸式
+        children: <Widget>[BannerView(), _listView(context)],
+      ),
+    );
+  }
 
-      body: Container(
+  Widget _listView(BuildContext context) {
+    return Container(
         width: MediaQuery.of(context).size.width,
-        height: 180.0,
-        child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            ImagesModel im = this._items[index];
-            return (Image.network(
+        height: MediaQuery.of(context).size.height,
+        child: ListView.builder(
+            itemCount: 100,
+            itemExtent: 50,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(title: Text("$index"));
+            }));
+  }
+
+  Widget BannerView() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 200.0,
+      child: Swiper(
+        itemBuilder: (BuildContext context, int index) {
+          ImagesModel im = this._items[index];
+
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ItemInfoDetail(
+                            url: im.bannerData.url,
+                            title: im.bannerData.title,
+                          )));
+            },
+            child: Image.network(
               im.bannerData.imagePath,
               fit: BoxFit.fill,
-            ));
-          },
-          itemCount: _items.length,
-          pagination: new SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-            color: Colors.grey,
-            activeColor: Colors.red,
-            size: 6.0,
-            activeSize: 6.0,
-          )),
-          control: null,
-          scrollDirection: Axis.horizontal,
-          autoplay: true,
-          onTap: (index) => print("点击了第$index个"),
-        ),
+            ),
+          );
+          /*  return (Image.network(
+            im.bannerData.imagePath,
+            fit: BoxFit.fill,
+          ));*/
+        },
+        itemCount: _items.length,
+        pagination: new SwiperPagination(
+            builder: DotSwiperPaginationBuilder(
+          color: Colors.grey,
+          activeColor: Colors.red,
+          size: 6.0,
+          activeSize: 6.0,
+        )),
+        control: null,
+        scrollDirection: Axis.horizontal,
+        autoplay: true,
+        onTap: (index) => print("点击了$index"),
       ),
     );
   }
@@ -86,9 +125,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
-
-
 }
 
 class ImagesModel {
