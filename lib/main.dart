@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home: new Index(),
 
     );

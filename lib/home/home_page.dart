@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +13,14 @@ class HomePage extends StatefulWidget {
   }
 }
 
-class Page extends State<HomePage> {
-  String dataStr = "";
-  List<String> _picList = new List();
+class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
+
+
+
   var _items = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -40,7 +38,7 @@ class Page extends State<HomePage> {
           itemBuilder: (BuildContext context, int index) {
             ImagesModel im = this._items[index];
             return (Image.network(
-              im.pic.imagePath,
+              im.bannerData.imagePath,
               fit: BoxFit.fill,
             ));
           },
@@ -49,8 +47,8 @@ class Page extends State<HomePage> {
               builder: DotSwiperPaginationBuilder(
             color: Colors.grey,
             activeColor: Colors.red,
-            size: 7.0,
-            activeSize: 7.0,
+            size: 6.0,
+            activeSize: 6.0,
           )),
           control: null,
           scrollDirection: Axis.horizontal,
@@ -75,22 +73,26 @@ class Page extends State<HomePage> {
     print("返回数据: " + data.toString());
     BannerEntity bannerEntity = BannerEntity.fromJson(data);
     var items = [];
-    List<BannerData> _picList=bannerEntity.data;
-
-
+    List<BannerData> _picList = bannerEntity.data;
     //遍历添加到数组当中去
     _picList.forEach((item) {
       items.add(ImagesModel(item));
     });
-
     setState(() {
       _items = items;
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+
+
 }
 
 class ImagesModel {
-  BannerData pic;
+  BannerData bannerData;
 
-  ImagesModel(this.pic);
+  ImagesModel(this.bannerData);
 }
