@@ -27,40 +27,31 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     getArticleData();
   }
 
-  Widget layout(BuildContext context) {
-    return new Scaffold(
-      //沉浸式状态栏
-      /*appBar: new PreferredSize(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.red, Colors.red])),
-          child: SafeArea(child: Text("1212")),),
-        preferredSize: Size(double.infinity,10),
-        ),*/
-      body: ListView(
-        padding: EdgeInsets.only(top: 0), //设置可沉浸式
-        children: <Widget>[BannerView(), _listView(context)],
-      ),
-    );
+  Future<Null> _refresh() async {
+    await getData();
+    await getArticleData();
+    return;
   }
 
-  Widget _listView(BuildContext context) {
+  Widget layout(BuildContext context) {
     Widget childWidget;
-
     if (_items_article.length != 0) {
-      childWidget = Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: ListView.builder(
-              itemCount: this._items_article.length,
-              itemExtent:80,
-              itemBuilder: (BuildContext context, int index) {
-                ArticleModel articleModel = this._items_article[index];
-
-                //  return ListTile(title: Text(articleModel.articleDataData.title));
-                return _getListData(context, index, articleModel);
-              }));
+      childWidget = new Scaffold(
+          body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: BannerView(),
+            ),
+            SliverFixedExtentList(
+              delegate: SliverChildBuilderDelegate(_buildListItem,
+                  childCount: _items_article.length),
+              itemExtent: 80.0,
+            )
+          ],
+        ),
+      ));
     } else {
       childWidget = new Stack(
         children: <Widget>[
@@ -76,50 +67,73 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
           new Padding(
             padding: new EdgeInsets.fromLTRB(0.0, 35.0, 0.0, 0.0),
             child: new Center(
-              child: new Text('正在加载中，莫着急哦~'),
+              child: new Text('正在加载'),
             ),
           ),
         ],
       );
     }
     return childWidget;
-
-
   }
 
-  Widget _getListData(
-      BuildContext context, int position, ArticleModel articleModel) {
-    return GestureDetector(
-      onTap: () {},
-      child: Center(
-        child: new Container(
-          child:new Column(
+  Widget _buildListItem(BuildContext context, int index) {
+    Widget childWidget;
+    ArticleModel articleModel = this._items_article[index];
+    if (articleModel.articleDataData.envelopePic != "") {
+      childWidget = GestureDetector(
+        onTap: () {},
+        child: Center(
+          child: new Container(
+              child: new Column(
             children: <Widget>[
               new Row(
                 children: <Widget>[
                   new Expanded(
-                      child: new Container(
-                        padding: const EdgeInsets.fromLTRB(3.0, 6.0, 3.0, 0.0),
-                        child: new Image.network(articleModel.articleDataData.envelopePic,fit: BoxFit.cover,),
-                        height: 50,
-                        width: 50,
+                    child: new Container(
+                      padding: const EdgeInsets.fromLTRB(3.0, 6.0, 3.0, 0.0),
+                      child: new Image.network(
+                        articleModel.articleDataData.envelopePic,
+                        fit: BoxFit.cover,
                       ),
-                    flex:1,
+                      height: 80,
+                      width: 80,
+                    ),
+                    flex: 1,
                   ),
-                  new Expanded(child: new Text(articleModel.articleDataData.title),
-                    flex:2,
+                  new Expanded(
+                    child: new Text(articleModel.articleDataData.title),
+                    flex: 2,
                   ),
                 ],
               ),
             ],
-          )
+          )),
         ),
-      ),
-    );
+      );
+    } else {
+      childWidget = GestureDetector(
+        onTap: () {},
+        child: Center(
+          child: new Container(
+              child: new Column(
+            children: <Widget>[
+              new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: new Text(articleModel.articleDataData.title),
+                    flex: 2,
+                  ),
+                ],
+              ),
+            ],
+          )),
+        ),
+      );
+    }
+    return childWidget;
   }
 
-
-
+  //轮播图
   Widget BannerView() {
     return Container(
       width: MediaQuery.of(context).size.width,
