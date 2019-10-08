@@ -19,17 +19,27 @@ class HomePage extends StatefulWidget {
 class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   var _items_banner = [];
   var _items_article = [];
+  ScrollController scrollController = new ScrollController();
+  int count = 0;
+  bool isPerformingRequest = false;
 
   @override
   void initState() {
     super.initState();
     getData();
-    getArticleData();
+    getArticleData(0);
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        count++;
+        getMoreArticleData(count);
+      }
+    });
   }
 
   Future<Null> _refresh() async {
     await getData();
-    await getArticleData();
+    await getArticleData(0);
     return;
   }
 
@@ -38,20 +48,25 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     if (_items_article.length != 0) {
       childWidget = new Scaffold(
           body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: BannerView(),
+            onRefresh: _refresh,
+            color: Colors.red,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverToBoxAdapter(
+                  child: BannerView(),
+                ),
+
+                SliverFixedExtentList(
+                  delegate: SliverChildBuilderDelegate(
+                      _buildListItem,
+                      childCount: _items_article.length),
+                  itemExtent: 80.0,
+                ),
+
+              ],
+              controller: scrollController,
             ),
-            SliverFixedExtentList(
-              delegate: SliverChildBuilderDelegate(_buildListItem,
-                  childCount: _items_article.length),
-              itemExtent: 80.0,
-            )
-          ],
-        ),
-      ));
+          ));
     } else {
       childWidget = new Stack(
         children: <Widget>[
@@ -59,7 +74,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 35.0),
             child: new Center(
               child: SpinKitFadingCircle(
-                color: Colors.blueAccent,
+                color: Colors.red,
                 size: 30.0,
               ),
             ),
@@ -79,64 +94,96 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildListItem(BuildContext context, int index) {
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
-    if (articleModel.articleDataData.envelopePic != "") {
-      childWidget = GestureDetector(
-        onTap: () {},
-        child: Center(
-          child: new Container(
-              child: new Column(
-            children: <Widget>[
-              new Row(
-                children: <Widget>[
-                  new Expanded(
-                    child: new Container(
-                      padding: const EdgeInsets.fromLTRB(3.0, 6.0, 3.0, 0.0),
-                      child: new Image.network(
-                        articleModel.articleDataData.envelopePic,
-                        fit: BoxFit.cover,
-                      ),
-                      height: 80,
-                      width: 80,
-                    ),
-                    flex: 1,
-                  ),
-                  new Expanded(
-                    child: new Text(articleModel.articleDataData.title),
-                    flex: 2,
-                  ),
-                ],
-              ),
-            ],
-          )),
-        ),
-      );
+    if (index == _items_article.length - 1) {
+      return _buildProgressIndicator();
     } else {
-      childWidget = GestureDetector(
-        onTap: () {},
-        child: Center(
-          child: new Container(
-              child: new Column(
-            children: <Widget>[
-              new Row(
-                children: <Widget>[
-                  new Expanded(
-                    child: new Text(articleModel.articleDataData.title),
-                    flex: 2,
-                  ),
-                ],
-              ),
-            ],
-          )),
-        ),
-      );
+
+
+      if (articleModel.articleDataData.envelopePic != "") {
+        childWidget = GestureDetector(
+          onTap: () {
+            Navigator.push(context, new MaterialPageRoute(builder: (context) =>
+                ItemInfoDetail(url: articleModel.articleDataData.link,
+                  title: articleModel.articleDataData.title,)));
+          },
+          child: Center(
+            child: new Container(
+                child: new Column(
+                  children: <Widget>[
+                    new Row(
+                      children: <Widget>[
+                        new Expanded(
+                          child: new Container(
+                            padding: const EdgeInsets.fromLTRB(
+                                3.0, 6.0, 3.0, 0.0),
+                            child: new Image.network(
+                              articleModel.articleDataData.envelopePic,
+                              fit: BoxFit.cover,
+                            ),
+                            height: 80,
+                            width: 80,
+                          ),
+                          flex: 1,
+                        ),
+                        new Expanded(
+                          child: new Text(articleModel.articleDataData.title),
+                          flex: 2,
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
+        );
+      } else {
+        childWidget = GestureDetector(
+          onTap: () {
+            Navigator.push(context, new MaterialPageRoute(builder: (context) =>
+                ItemInfoDetail(url: articleModel.articleDataData.link,
+                  title: articleModel.articleDataData.title,)));
+          },
+          child: Center(
+            child: new Container(
+                child: new Column(
+                  children: <Widget>[
+                    new Row(
+                      children: <Widget>[
+                        new Expanded(
+                          child: new Text(articleModel.articleDataData.title),
+                          flex: 2,
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
+        );
+      }
     }
+
     return childWidget;
+  }
+
+  Widget _buildProgressIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: new Center(
+        child: new Opacity(
+          opacity: isPerformingRequest ? 1.0 : 0.0,
+          child: new CircularProgressIndicator(
+          ),
+        ),
+      ),
+    );
   }
 
   //轮播图
   Widget BannerView() {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       height: 200.0,
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
@@ -147,7 +194,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ItemInfoDetail(
+                      builder: (context) =>
+                          ItemInfoDetail(
                             url: im.bannerData.url,
                             title: im.bannerData.title,
                           )));
@@ -165,11 +213,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         itemCount: _items_banner.length,
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(
-          color: Colors.grey,
-          activeColor: Colors.red,
-          size: 6.0,
-          activeSize: 6.0,
-        )),
+              color: Colors.grey,
+              activeColor: Colors.red,
+              size: 6.0,
+              activeSize: 6.0,
+            )),
         control: null,
         scrollDirection: Axis.horizontal,
         autoplay: true,
@@ -181,6 +229,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return layout(context);
   }
 
@@ -202,10 +251,13 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  Future getArticleData() async {
+  Future getArticleData(int count) async {
     Response response;
     Dio dio = Dio();
-    response = await dio.get(Api.ARTICLE_LIST_URL);
+    String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
+    print(url);
+
+    response = await dio.get(url);
     Map aritcle_data = response.data;
     ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
     var article_items = [];
@@ -218,6 +270,33 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     setState(() {
       _items_article = article_items;
     });
+  }
+
+  Future getMoreArticleData(int count) async {
+    if (!isPerformingRequest) {
+      setState(() {
+        isPerformingRequest = true;
+      });
+
+      Response response;
+      Dio dio = Dio();
+      String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
+      print(url);
+
+      response = await dio.get(url);
+      Map aritcle_data = response.data;
+      ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
+      var article_items = [];
+      List<ArticleDataData> _articleList = articleEntity.data.datas;
+      _articleList.forEach((item) {
+        article_items.add(ArticleModel(item));
+      });
+      print(aritcle_data);
+      setState(() {
+        _items_article.addAll(article_items);
+        isPerformingRequest = false;
+      });
+    }
   }
 
   @override

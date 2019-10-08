@@ -3,5 +3,5 @@ class Api {
 
   static const String BANNER_URL = BaseUrl+"banner/json";
 
-  static const String ARTICLE_LIST_URL = BaseUrl+"article/list/0/json";
+  static String ARTICLE_LIST_URL = BaseUrl+"article/list/";
 }
