@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:news/model/Api.dart';
+import 'package:news/model/Content.dart';
 import 'package:news/model/banner_entity.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -38,6 +39,12 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     });
   }
 
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   Future<Null> _refresh() async {
     await getData();
     await getArticleData(0);
@@ -48,32 +55,40 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     Widget childWidget;
     if (_items_article.length != 0) {
       childWidget = new Scaffold(
+          appBar: PreferredSize(
+              child: AppBar(
+                  backgroundColor: Colors.red,
+                  title: Text(
+                    "首页",
+                    style: TextStyle(fontSize: 15),
+                  )),
+              preferredSize: Size.fromHeight(Content.BAR_HEIGHT)),
           body: RefreshIndicator(
-        onRefresh: _refresh,
-        color: Colors.red,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverToBoxAdapter(
-              child: new Container(
-                child: BannerView(),
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          width: 8,
-                          style: BorderStyle.solid,
-                          color: Colors.grey[200])),
+            onRefresh: _refresh,
+            color: Colors.red,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverToBoxAdapter(
+                  child: new Container(
+                    child: BannerView(),
+                    decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 8,
+                              style: BorderStyle.solid,
+                              color: Colors.grey[200])),
+                    ),
+                  ),
                 ),
-              ),
+                SliverFixedExtentList(
+                  delegate: SliverChildBuilderDelegate(_buildListItem,
+                      childCount: _items_article.length),
+                  itemExtent: 100.0,
+                ),
+              ],
+              controller: scrollController,
             ),
-            SliverFixedExtentList(
-              delegate: SliverChildBuilderDelegate(_buildListItem,
-                  childCount: _items_article.length),
-              itemExtent: 100.0,
-            ),
-          ],
-          controller: scrollController,
-        ),
-      ));
+          ));
     } else {
       childWidget = Container(
         child: Column(

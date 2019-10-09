@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:news/model/Content.dart';
 
 class FindPage extends StatefulWidget {
   @override
@@ -38,10 +39,14 @@ class Page extends State<FindPage> {
 
 Widget layout(BuildContext context) {
   return new Scaffold(
-    appBar: new AppBar(
-      backgroundColor: Colors.red,
-      title: const Text("发现"),
-    ),
+    appBar:  PreferredSize(
+        child: AppBar(
+            backgroundColor: Colors.red,
+            title: Text(
+              "发现",
+              style: TextStyle(fontSize: 15),
+            )),
+        preferredSize: Size.fromHeight(Content.BAR_HEIGHT)),
     //body: ListView.builder(itemCount: _items.length, itemBuilder: itemView),
   );
 }
