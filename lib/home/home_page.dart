@@ -32,6 +32,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         count++;
+        //上拉加载更多
         getMoreArticleData(count);
       }
     });
@@ -48,44 +49,47 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     if (_items_article.length != 0) {
       childWidget = new Scaffold(
           body: RefreshIndicator(
-            onRefresh: _refresh,
-            color: Colors.red,
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: BannerView(),
+        onRefresh: _refresh,
+        color: Colors.red,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: new Container(
+                child: BannerView(),
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          width: 8,
+                          style: BorderStyle.solid,
+                          color: Colors.grey[200])),
                 ),
-
-                SliverFixedExtentList(
-                  delegate: SliverChildBuilderDelegate(
-                      _buildListItem,
-                      childCount: _items_article.length),
-                  itemExtent: 80.0,
-                ),
-
-              ],
-              controller: scrollController,
-            ),
-          ));
-    } else {
-      childWidget = new Stack(
-        children: <Widget>[
-          new Padding(
-            padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 35.0),
-            child: new Center(
-              child: SpinKitFadingCircle(
-                color: Colors.red,
-                size: 30.0,
               ),
             ),
-          ),
-          new Padding(
-            padding: new EdgeInsets.fromLTRB(0.0, 35.0, 0.0, 0.0),
-            child: new Center(
-              child: new Text('正在加载'),
+            SliverFixedExtentList(
+              delegate: SliverChildBuilderDelegate(_buildListItem,
+                  childCount: _items_article.length),
+              itemExtent: 100.0,
             ),
-          ),
-        ],
+          ],
+          controller: scrollController,
+        ),
+      ));
+    } else {
+      childWidget = Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SpinKitFadingCircle(
+              color: Colors.red,
+              size: 30.0,
+            ),
+            new Padding(padding: EdgeInsets.only(top: 10)),
+            Text(
+              "正在加载",
+              style: TextStyle(fontSize: 12.0, color: Colors.grey),
+            )
+          ],
+        ),
       );
     }
     return childWidget;
@@ -95,68 +99,193 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
     if (index == _items_article.length - 1) {
+      //下拉加载的视图
       return _buildProgressIndicator();
     } else {
-
-
       if (articleModel.articleDataData.envelopePic != "") {
         childWidget = GestureDetector(
           onTap: () {
-            Navigator.push(context, new MaterialPageRoute(builder: (context) =>
-                ItemInfoDetail(url: articleModel.articleDataData.link,
-                  title: articleModel.articleDataData.title,)));
+            //页面详情跳转
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => ItemInfoDetail(
+                          url: articleModel.articleDataData.link,
+                          title: articleModel.articleDataData.title,
+                        )));
           },
-          child: Center(
-            child: new Container(
-                child: new Column(
-                  children: <Widget>[
-                    new Row(
+          child: new Container(
+              decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.5,
+                        style: BorderStyle.solid,
+                        color: Colors.grey[200])),
+              ),
+              child: new Column(
+                children: <Widget>[
+                  new Expanded(
+                    flex: 1,
+                    child: Stack(
                       children: <Widget>[
-                        new Expanded(
-                          child: new Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                3.0, 6.0, 3.0, 0.0),
-                            child: new Image.network(
-                              articleModel.articleDataData.envelopePic,
-                              fit: BoxFit.cover,
-                            ),
-                            height: 80,
-                            width: 80,
+                        Positioned(
+                          left: 15,
+                          top: 8,
+                          child: Text(
+                            articleModel.articleDataData.shareUser,
+                            style: TextStyle(
+                                fontSize: 12.0, color: Colors.black45),
                           ),
-                          flex: 1,
                         ),
-                        new Expanded(
-                          child: new Text(articleModel.articleDataData.title),
-                          flex: 2,
+                        Positioned(
+                          right: 15,
+                          top: 8,
+                          child: Text(
+                            articleModel.articleDataData.niceDate,
+                            style: TextStyle(
+                                fontSize: 11.0, color: Colors.black45),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  new Expanded(
+                    child: new Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 15,
+                          child: Image.network(
+                            articleModel.articleDataData.envelopePic,
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 50,
+                          ),
+                        ),
+                        Positioned(
+                          right: 15,
+                          left: 85,
+                          child: new Column(
+                            children: <Widget>[
+                              Text(
+                                articleModel.articleDataData.title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 14.0, color: Colors.black),
+                              ),
+                              new Padding(padding: EdgeInsets.only(top: 10)),
+                              Text(
+                                articleModel.articleDataData.desc,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black45),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                )),
-          ),
+                    flex: 2,
+                  ),
+                  new Expanded(
+                    child: new Row(
+                      children: <Widget>[
+                        new Padding(padding: EdgeInsets.only(left: 15)),
+                        Text(
+                          articleModel.articleDataData.superChapterName +
+                              "·" +
+                              articleModel.articleDataData.chapterName,
+                          style: TextStyle(fontSize: 11.0),
+                        ),
+                      ],
+                    ),
+                    flex: 1,
+                  ),
+                ],
+              )),
         );
       } else {
         childWidget = GestureDetector(
           onTap: () {
-            Navigator.push(context, new MaterialPageRoute(builder: (context) =>
-                ItemInfoDetail(url: articleModel.articleDataData.link,
-                  title: articleModel.articleDataData.title,)));
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => ItemInfoDetail(
+                          url: articleModel.articleDataData.link,
+                          title: articleModel.articleDataData.title,
+                        )));
           },
-          child: Center(
-            child: new Container(
-                child: new Column(
-                  children: <Widget>[
-                    new Row(
+          child: new Container(
+              decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.5,
+                        style: BorderStyle.solid,
+                        color: Colors.grey[200])),
+              ),
+              child: new Column(
+                children: <Widget>[
+                  new Expanded(
+                    flex: 1,
+                    child: Stack(
                       children: <Widget>[
-                        new Expanded(
-                          child: new Text(articleModel.articleDataData.title),
-                          flex: 2,
+                        Positioned(
+                          left: 15,
+                          top: 8,
+                          child: Text(
+                            articleModel.articleDataData.shareUser,
+                            style: TextStyle(
+                                fontSize: 12.0, color: Colors.black45),
+                          ),
+                        ),
+                        Positioned(
+                          right: 15,
+                          top: 8,
+                          child: Text(
+                            articleModel.articleDataData.niceDate,
+                            style: TextStyle(
+                                fontSize: 11.0, color: Colors.black45),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  new Expanded(
+                    child: new Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 15,
+                          right: 15,
+                          top: 5,
+                          child: Text(
+                            articleModel.articleDataData.title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style:
+                                TextStyle(fontSize: 14.0, color: Colors.black),
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                )),
-          ),
+                    flex: 2,
+                  ),
+                  new Expanded(
+                    child: new Row(
+                      children: <Widget>[
+                        new Padding(padding: EdgeInsets.only(left: 15)),
+                        Text(
+                          articleModel.articleDataData.superChapterName +
+                              "·" +
+                              articleModel.articleDataData.chapterName,
+                          style: TextStyle(fontSize: 11.0),
+                        ),
+                      ],
+                    ),
+                    flex: 1,
+                  ),
+                ],
+              )),
         );
       }
     }
@@ -166,11 +295,23 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   Widget _buildProgressIndicator() {
     return new Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(0.0),
       child: new Center(
         child: new Opacity(
           opacity: isPerformingRequest ? 1.0 : 0.0,
-          child: new CircularProgressIndicator(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SpinKitFadingCircle(
+                color: Colors.red,
+                size: 30.0,
+              ),
+              new Padding(padding: EdgeInsets.only(right: 10)),
+              Text(
+                "正在加载",
+                style: TextStyle(fontSize: 12.0, color: Colors.grey),
+              )
+            ],
           ),
         ),
       ),
@@ -180,10 +321,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   //轮播图
   Widget BannerView() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       height: 200.0,
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
@@ -194,8 +332,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ItemInfoDetail(
+                      builder: (context) => ItemInfoDetail(
                             url: im.bannerData.url,
                             title: im.bannerData.title,
                           )));
@@ -213,11 +350,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         itemCount: _items_banner.length,
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(
-              color: Colors.grey,
-              activeColor: Colors.red,
-              size: 6.0,
-              activeSize: 6.0,
-            )),
+          color: Colors.grey,
+          activeColor: Colors.red,
+          size: 6.0,
+          activeSize: 6.0,
+        )),
         control: null,
         scrollDirection: Axis.horizontal,
         autoplay: true,
