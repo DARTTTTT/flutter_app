@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/find/find_page.dart';
 import 'package:news/home/home_page.dart';
+import 'package:news/info/Info.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _IndexState extends State<Index> {
     ),
   ];
 
-  final bodyList = [HomePage(), FindPage(), HomePage(), FindPage(),HomePage()];
+  final bodyList = [HomePage(), FindPage(), Info(), FindPage(),HomePage()];
 
   final pageController = PageController();
   int currentIndex = 0;

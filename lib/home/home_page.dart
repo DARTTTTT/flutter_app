@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
-import 'package:news/model/banner_entity.dart';
 import 'package:news/model/article_entity.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:news/model/banner_entity.dart';
+
 import 'ItemInfoDetail.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,12 +18,16 @@ class HomePage extends StatefulWidget {
   }
 }
 
+const maxOffset = 100;
+
 class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   var _items_banner = [];
   var _items_article = [];
   ScrollController scrollController = new ScrollController();
   int count = 0;
   bool isPerformingRequest = false;
+
+  double appBarAlpha = 0;
 
   @override
   void initState() {
@@ -36,6 +41,9 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         //上拉加载更多
         getMoreArticleData(count);
       }
+
+      if (scrollController.position.pixels ==
+          scrollController.position.minScrollExtent) {}
     });
   }
 
@@ -54,41 +62,67 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget layout(BuildContext context) {
     Widget childWidget;
     if (_items_article.length != 0) {
-      childWidget = new Scaffold(
-          appBar: PreferredSize(
-              child: AppBar(
-                  backgroundColor: Colors.red,
-                  title: Text(
-                    "首页",
-                    style: TextStyle(fontSize: 15),
-                  )),
-              preferredSize: Size.fromHeight(Content.BAR_HEIGHT)),
-          body: RefreshIndicator(
-            onRefresh: _refresh,
-            color: Colors.red,
-            child: CustomScrollView(
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: new Container(
-                    child: BannerView(),
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              width: 8,
-                              style: BorderStyle.solid,
-                              color: Colors.grey[200])),
+      childWidget = new Stack(
+        children: <Widget>[
+          MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+
+               /*   child: NotificationListener(
+                    onNotification: (notification) {
+                      if (notification is ScrollUpdateNotification &&
+                          notification.depth == 0) {
+                        _onScrol(notification.metrics.pixels);
+                      }
+                    },*/
+                    child: RefreshIndicator(
+                      onRefresh: _refresh,
+                      color: Colors.red,
+                      child: CustomScrollView(
+                        slivers: <Widget>[
+                          SliverToBoxAdapter(
+                            child: new Container(
+                              child: BannerView(),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 8,
+                                        style: BorderStyle.solid,
+                                        color: Colors.grey[200])),
+                              ),
+                            ),
+                          ),
+                          SliverFixedExtentList(
+                            delegate: SliverChildBuilderDelegate(
+                                _buildListItem,
+                                childCount: _items_article.length),
+                            itemExtent: 100.0,
+                          ),
+                        ],
+                        controller: scrollController,
+                      ),
                     ),
-                  ),
-                ),
-                SliverFixedExtentList(
-                  delegate: SliverChildBuilderDelegate(_buildListItem,
-                      childCount: _items_article.length),
-                  itemExtent: 100.0,
-                ),
-              ],
-              controller: scrollController,
+                 // )
+
+          ),
+          Opacity(
+            opacity: appBarAlpha,
+            child: Container(
+              height: MediaQuery
+                  .of(context)
+                  .padding
+                  .top + Content.BAR_HEIGHT,
+              child: AppBar(
+                backgroundColor: Colors.red,
+                title: Text('首页', style: TextStyle(
+                    fontSize: 15.0
+                ),),
+                //centerTitle: true,
+              ),
             ),
-          ));
+          )
+        ],
+      );
     } else {
       childWidget = Container(
         child: Column(
@@ -124,7 +158,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => ItemInfoDetail(
+                    builder: (context) =>
+                        ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -226,7 +261,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => ItemInfoDetail(
+                    builder: (context) =>
+                        ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -278,7 +314,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style:
-                                TextStyle(fontSize: 14.0, color: Colors.black),
+                            TextStyle(fontSize: 14.0, color: Colors.black),
                           ),
                         ),
                       ],
@@ -336,7 +372,10 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   //轮播图
   Widget BannerView() {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       height: 200.0,
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
@@ -347,7 +386,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ItemInfoDetail(
+                      builder: (context) =>
+                          ItemInfoDetail(
                             url: im.bannerData.url,
                             title: im.bannerData.title,
                           )));
@@ -365,11 +405,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         itemCount: _items_banner.length,
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(
-          color: Colors.grey,
-          activeColor: Colors.red,
-          size: 6.0,
-          activeSize: 6.0,
-        )),
+              color: Colors.grey,
+              activeColor: Colors.red,
+              size: 6.0,
+              activeSize: 6.0,
+            )),
         control: null,
         scrollDirection: Axis.horizontal,
         autoplay: true,
@@ -383,6 +423,19 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     // TODO: implement build
 
     return layout(context);
+  }
+
+  void _onScrol(offset) {
+    double alpha = offset / maxOffset;
+    if (alpha < 0) {
+      alpha = 0;
+    } else if (alpha > 1) {
+      alpha = 1;
+    }
+
+    setState(() {
+      appBarAlpha = alpha;
+    });
   }
 
   Future getData() async {
