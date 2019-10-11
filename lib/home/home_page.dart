@@ -65,45 +65,43 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       childWidget = new Stack(
         children: <Widget>[
           MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
+            removeTop: true,
+            context: context,
 
-               /*   child: NotificationListener(
+            /*   child: NotificationListener(
                     onNotification: (notification) {
                       if (notification is ScrollUpdateNotification &&
                           notification.depth == 0) {
                         _onScrol(notification.metrics.pixels);
                       }
                     },*/
-                    child: RefreshIndicator(
-                      onRefresh: _refresh,
-                      color: Colors.red,
-                      child: CustomScrollView(
-                        slivers: <Widget>[
-                          SliverToBoxAdapter(
-                            child: new Container(
-                              child: BannerView(),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 8,
-                                        style: BorderStyle.solid,
-                                        color: Colors.grey[200])),
-                              ),
-                            ),
-                          ),
-                          SliverFixedExtentList(
-                            delegate: SliverChildBuilderDelegate(
-                                _buildListItem,
-                                childCount: _items_article.length),
-                            itemExtent: 100.0,
-                          ),
-                        ],
-                        controller: scrollController,
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              color: Colors.red,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: new Container(
+                      child: BannerView(),
+                      decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                                width: 8,
+                                style: BorderStyle.solid,
+                                color: Colors.grey[200])),
                       ),
                     ),
-                 // )
-
+                  ),
+                  SliverFixedExtentList(
+                    delegate: SliverChildBuilderDelegate(_buildListItem,
+                        childCount: _items_article.length),
+                    itemExtent: 100.0,
+                  ),
+                ],
+                controller: scrollController,
+              ),
+            ),
+            // )
           ),
           Opacity(
             opacity: appBarAlpha,
@@ -114,9 +112,10 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   .top + Content.BAR_HEIGHT,
               child: AppBar(
                 backgroundColor: Colors.red,
-                title: Text('首页', style: TextStyle(
-                    fontSize: 15.0
-                ),),
+                title: Text(
+                  '首页',
+                  style: TextStyle(fontSize: 15.0),
+                ),
                 //centerTitle: true,
               ),
             ),
@@ -157,7 +156,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             //页面详情跳转
             Navigator.push(
                 context,
-                new MaterialPageRoute(
+                new CupertinoPageRoute(
                     builder: (context) =>
                         ItemInfoDetail(
                           url: articleModel.articleDataData.link,
@@ -260,7 +259,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
           onTap: () {
             Navigator.push(
                 context,
-                new MaterialPageRoute(
+                new CupertinoPageRoute(
                     builder: (context) =>
                         ItemInfoDetail(
                           url: articleModel.articleDataData.link,
@@ -385,12 +384,29 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             onTap: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ItemInfoDetail(
-                            url: im.bannerData.url,
-                            title: im.bannerData.title,
-                          )));
+
+                  /*PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (BuildContext context, Animation animation,
+                        Animation secondAnimation) {
+                      return new FadeTransition(
+                        opacity: animation, child: ItemInfoDetail(
+                        url: im.bannerData.url,
+                        title: im.bannerData.title,
+                      ),);
+                    },
+                  )*/
+
+                  CupertinoPageRoute(
+
+                  builder: (context)
+              =>
+                  ItemInfoDetail(
+                    url: im.bannerData.url,
+                    title: im.bannerData.title,
+                  )
+              )
+              );
             },
             child: Image.network(
               im.bannerData.imagePath,
