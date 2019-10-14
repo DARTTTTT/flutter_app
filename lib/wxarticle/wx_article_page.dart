@@ -6,8 +6,9 @@ import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
 import 'package:news/model/project_entity.dart';
 import 'package:news/project/project_item_page.dart';
+import 'package:news/wxarticle/wx_item_page.dart';
 
-class ProjectPage extends StatefulWidget {
+class WxArticlePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -15,7 +16,7 @@ class ProjectPage extends StatefulWidget {
   }
 }
 
-class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
+class Page extends State<WxArticlePage> with SingleTickerProviderStateMixin {
   var _projectTreeList = [];
 
   //List tabs = ["完整项目", "跨平台应用", "资源聚合类"];
@@ -69,7 +70,7 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
           ),
           body: TabBarView(
             children: List.generate(_projectTreeList.length,
-                (index) => ProjectItemPage(_projectTreeList[index].id)),
+                (index) => WxItemPage(_projectTreeList[index].id.toString())),
           ),
         ),
       );
@@ -81,9 +82,8 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
   //获取列表的请求
   Future getItemData() async {
     Dio dio = Dio();
-    Response response = await dio.get(Api.PROJECT_TREE_URL);
+    Response response = await dio.get(Api.WX_ARTICLE_CHAPTER_URL);
     Map data = response.data;
-    print("列表: " + data.toString());
     ProjectEntity projectEntity = ProjectEntity.fromJson(data);
 
     var items = [];

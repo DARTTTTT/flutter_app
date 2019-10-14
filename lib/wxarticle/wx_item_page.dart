@@ -2,35 +2,26 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:news/home/ItemInfoDetail.dart';
 import 'package:news/model/Api.dart';
-import 'package:news/model/Content.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:news/model/banner_entity.dart';
 
+class WxItemPage extends StatefulWidget {
+  String id;
 
-class ProjectItemPage extends StatefulWidget {
-
-
-  int id;
-  ProjectItemPage(this.id);
-
+  WxItemPage(this.id);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return new Page();
   }
-
-
-
 }
 
 const maxOffset = 100;
 
-class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
-  var _items_banner = [];
+class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
   var _items_article = [];
 
   ScrollController scrollController = new ScrollController();
@@ -42,7 +33,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-   // getData();
+    // getData();
     getArticleData(1);
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
@@ -64,7 +55,6 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
   }
 
   Future<Null> _refresh() async {
-    await getData();
     await getArticleData(1);
     return;
   }
@@ -130,8 +120,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new CupertinoPageRoute(
-                    builder: (context) =>
-                        ItemInfoDetail(
+                    builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -233,8 +222,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new CupertinoPageRoute(
-                    builder: (context) =>
-                        ItemInfoDetail(
+                    builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -286,7 +274,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style:
-                            TextStyle(fontSize: 14.0, color: Colors.black),
+                                TextStyle(fontSize: 14.0, color: Colors.black),
                           ),
                         ),
                       ],
@@ -341,8 +329,6 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -350,33 +336,17 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
     return layout(context);
   }
 
-
-
-  Future getData() async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.get(Api.BANNER_URL);
-    Map data = response.data;
-    BannerEntity bannerEntity = BannerEntity.fromJson(data);
-    var items = [];
-    List<BannerData> _picList = bannerEntity.data;
-    //遍历添加到数组当中去
-    _picList.forEach((item) {
-      items.add(ImagesModel(item));
-    });
-
-    setState(() {
-      _items_banner = items;
-    });
-  }
-
   Future getArticleData(int count) async {
     Response response;
     Dio dio = Dio();
-    String url = Api.PROJECT_LIST_URL + count.toString() + "/json";
+    String url = Api.WX_ARTICLE_CHAPTER_LIST_URL +
+        widget.id +
+        "/" +
+        count.toString() +
+        "/json";
     print(url);
     print(widget.id);
-    response = await dio.get(url,queryParameters: {"cid":widget.id});
+    response = await dio.get(url);
     Map aritcle_data = response.data;
     ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
     var article_items = [];
@@ -399,8 +369,9 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
 
       Response response;
       Dio dio = Dio();
-      String url = Api.PROJECT_LIST_URL + count.toString() + "/json";
-      response = await dio.get(url,queryParameters: {"cid":widget.id});
+      String url = Api.WX_ARTICLE_CHAPTER_LIST_URL + widget.id + "/" + count.toString() + "/json";
+
+      response = await dio.get(url);
 
       Map aritcle_data = response.data;
       ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);

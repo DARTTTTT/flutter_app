@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/find/find_page.dart';
 import 'package:news/home/home_page.dart';
-import 'package:news/info/Info.dart';
 import 'package:news/project/project_page.dart';
+import 'package:news/system/system_page.dart';
+import 'package:news/wxarticle/wx_article_page.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _IndexState extends State<Index> {
     ),
   ];
 
-  final bodyList = [HomePage(), Project(), Info(), FindPage(),HomePage()];
+  final bodyList = [HomePage(), ProjectPage(), WxArticlePage(), SystemPage(), HomePage()];
 
   final pageController = PageController();
   int currentIndex = 0;
