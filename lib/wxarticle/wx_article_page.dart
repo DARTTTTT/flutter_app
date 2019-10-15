@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
 import 'package:news/model/project_entity.dart';
-import 'package:news/project/project_item_page.dart';
+import 'package:news/project/item_project_page.dart';
 import 'package:news/wxarticle/wx_item_page.dart';
 
 class WxArticlePage extends StatefulWidget {

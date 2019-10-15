@@ -8,7 +8,7 @@ import 'package:news/model/Content.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:news/model/banner_entity.dart';
 
-import 'ItemInfoDetail.dart';
+import 'ItemDetail.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -68,49 +68,49 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             removeTop: true,
             context: context,
 
-            /*   child: NotificationListener(
+               child: NotificationListener(
                     onNotification: (notification) {
                       if (notification is ScrollUpdateNotification &&
                           notification.depth == 0) {
                         _onScrol(notification.metrics.pixels);
                       }
-                    },*/
+                      return false;
+                    },
+                 child: RefreshIndicator(
+                   onRefresh: _refresh,
+                   color: Colors.red,
+                   child: CustomScrollView(
+                     slivers: <Widget>[
+                       SliverToBoxAdapter(
+                         child: new Container(
+                           child: BannerView(),
+                           decoration: BoxDecoration(
+                             border: Border(
+                                 bottom: BorderSide(
+                                     width: 8,
+                                     style: BorderStyle.solid,
+                                     color: Colors.grey[200])),
+                           ),
+                         ),
+                       ),
+                       SliverFixedExtentList(
+                         delegate: SliverChildBuilderDelegate(_buildListItem,
+                             childCount: _items_article.length),
+                         itemExtent: 100.0,
+                       ),
+                     ],
+                     controller: scrollController,
+                   ),
+                 ),
+               )
 
-            child: RefreshIndicator(
-              onRefresh: _refresh,
-              color: Colors.red,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverToBoxAdapter(
-                    child: new Container(
-                      child: BannerView(),
-                      decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                width: 8,
-                                style: BorderStyle.solid,
-                                color: Colors.grey[200])),
-                      ),
-                    ),
-                  ),
-                  SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(_buildListItem,
-                        childCount: _items_article.length),
-                    itemExtent: 100.0,
-                  ),
-                ],
-                controller: scrollController,
-              ),
-            ),
+
             // )
           ),
           Opacity(
             opacity: appBarAlpha,
             child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .padding
-                  .top + Content.BAR_HEIGHT,
+              height: MediaQuery.of(context).padding.top + Content.BAR_HEIGHT,
               child: AppBar(
                 backgroundColor: Colors.red,
                 title: Text(
@@ -158,8 +158,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new CupertinoPageRoute(
-                    builder: (context) =>
-                        ItemInfoDetail(
+                    builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -261,8 +260,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             Navigator.push(
                 context,
                 new CupertinoPageRoute(
-                    builder: (context) =>
-                        ItemInfoDetail(
+                    builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -314,7 +312,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style:
-                            TextStyle(fontSize: 14.0, color: Colors.black),
+                                TextStyle(fontSize: 14.0, color: Colors.black),
                           ),
                         ),
                       ],
@@ -372,11 +370,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   //轮播图
   Widget BannerView() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: 200.0,
+      width: MediaQuery.of(context).size.width,
+      height: 220.0,
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
           ImagesModel im = this._items_banner[index];
@@ -385,29 +380,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             onTap: () {
               Navigator.push(
                   context,
-
-                  /*PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500),
-                    pageBuilder: (BuildContext context, Animation animation,
-                        Animation secondAnimation) {
-                      return new FadeTransition(
-                        opacity: animation, child: ItemInfoDetail(
-                        url: im.bannerData.url,
-                        title: im.bannerData.title,
-                      ),);
-                    },
-                  )*/
-
                   CupertinoPageRoute(
-
-                  builder: (context)
-              =>
-                  ItemInfoDetail(
-                    url: im.bannerData.url,
-                    title: im.bannerData.title,
-                  )
-              )
-              );
+                      builder: (context) => ItemInfoDetail(
+                            url: im.bannerData.url,
+                            title: im.bannerData.title,
+                          )));
             },
             child: Image.network(
               im.bannerData.imagePath,
@@ -422,11 +399,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         itemCount: _items_banner.length,
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(
-              color: Colors.grey,
-              activeColor: Colors.red,
-              size: 6.0,
-              activeSize: 6.0,
-            )),
+          color: Colors.grey,
+          activeColor: Colors.red,
+          size: 6.0,
+          activeSize: 6.0,
+        )),
         control: null,
         scrollDirection: Axis.horizontal,
         autoplay: true,

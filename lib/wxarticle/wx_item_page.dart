@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:news/home/ItemInfoDetail.dart';
+import 'package:news/home/ItemDetail.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:news/model/banner_entity.dart';

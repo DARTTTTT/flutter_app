@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:news/home/ItemInfoDetail.dart';
+import 'package:news/home/ItemDetail.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:news/model/banner_entity.dart';
@@ -10,7 +10,9 @@ import 'package:news/model/banner_entity.dart';
 class ProjectItemPage extends StatefulWidget {
   int id;
 
-  ProjectItemPage(this.id);
+  String url;
+
+  ProjectItemPage(this.url,this.id);
 
   @override
   State<StatefulWidget> createState() {
@@ -35,7 +37,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     // getData();
-    getArticleData(1);
+    getArticleData(0);
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -119,10 +121,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
         childWidget = GestureDetector(
           onTap: () {
             //页面详情跳转
-            Navigator.push(
-                context,
-                new CupertinoPageRoute(
-                    builder: (context) => ItemInfoDetail(
+            Navigator.push(context, new CupertinoPageRoute(builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
                           title: articleModel.articleDataData.title,
                         )));
@@ -359,7 +358,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
   Future getArticleData(int count) async {
     Response response;
     Dio dio = Dio();
-    String url = Api.PROJECT_LIST_URL + count.toString() + "/json";
+    String url = widget.url + count.toString() + "/json";
     print(url);
     print(widget.id);
     response = await dio.get(url, queryParameters: {"cid": widget.id});
@@ -385,7 +384,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
 
       Response response;
       Dio dio = Dio();
-      String url = Api.PROJECT_LIST_URL + count.toString() + "/json";
+      String url = widget.url + count.toString() + "/json";
       response = await dio.get(url, queryParameters: {"cid": widget.id});
 
       Map aritcle_data = response.data;

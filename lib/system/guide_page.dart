@@ -2,12 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:news/manger/route_manger.dart';
+import 'package:news/home/ItemDetail.dart';
 import 'package:news/model/Api.dart';
+import 'package:news/model/article_entity.dart';
+import 'package:news/model/guide_entity.dart';
 import 'package:news/model/tree_entity.dart';
-import 'package:news/system/item_tree_page.dart';
+import 'package:news/system/item_guide_page.dart';
 
-class TreePage extends StatefulWidget {
+class GuidePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -15,7 +17,7 @@ class TreePage extends StatefulWidget {
   }
 }
 
-class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
+class Page extends State<GuidePage> with AutomaticKeepAliveClientMixin {
   var treeList = [];
 
   @override
@@ -53,8 +55,8 @@ class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
           padding: EdgeInsets.all(15),
           itemCount: treeList.length,
           itemBuilder: (context, index) {
-            TreeModel treeModel = this.treeList[index];
-            return TreeItemWidget(treeModel);
+            GuideModel treeModel = this.treeList[index];
+            return GuideItemWidget(treeModel);
           });
     }
     return childWidget;
@@ -62,12 +64,12 @@ class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
 
   Future getData() async {
     Dio dio = new Dio();
-    Response response = await dio.get(Api.SYSTEM_TREE_URL);
-    TreeEntity treeEntity = TreeEntity.fromJson(response.data);
+    Response response = await dio.get(Api.SYSTEM_NAVI_URL);
+    GuideEntity guideEntity = GuideEntity.fromJson(response.data);
     var items = [];
-    List<TreeData> _treeList = treeEntity.data;
+    List<GuideData> _treeList = guideEntity.data;
     _treeList.forEach((item) {
-      items.add(TreeModel(item));
+      items.add(GuideModel(item));
     });
     setState(() {
       this.treeList = items;
@@ -80,10 +82,10 @@ class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
 }
 
 // ignore: must_be_immutable
-class TreeItemWidget extends StatelessWidget {
-  TreeModel treeModel;
+class GuideItemWidget extends StatelessWidget {
+  GuideModel treeModel;
 
-  TreeItemWidget(this.treeModel);
+  GuideItemWidget(this.treeModel);
 
   @override
   Widget build(BuildContext context) {
@@ -94,15 +96,16 @@ class TreeItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              treeModel.treeData.name,
+              treeModel.guideData.name,
               style: TextStyle(fontSize: 15.0),
             ),
             Wrap(
                 spacing: 10,
                 children: List.generate(
-                    treeModel.treeData.children.length,
+                    treeModel.guideData.articles.length,
                     (index) => ActionChip(
                           onPressed: () {
+                            print(treeModel.guideData.articles[index].title);
                             /* Navigator.of(context).pushNamed(
                                 RouteTag.structureList,
                                 arguments: [treeModel, index]);*/
@@ -110,11 +113,15 @@ class TreeItemWidget extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 new CupertinoPageRoute(
-                                    builder: (context) =>
-                                        ItemTreePage(treeModel, index)));
+                                    builder: (context) => ItemInfoDetail(
+                                          url: treeModel
+                                              .guideData.articles[index].link,
+                                          title: treeModel
+                                              .guideData.articles[index].title,
+                                        )));
                           },
                           label: Text(
-                            treeModel.treeData.children[index].name,
+                            treeModel.guideData.articles[index].title,
                             maxLines: 1,
                             style: TextStyle(
                                 fontSize: 13.0, color: Colors.black45),
@@ -125,8 +132,8 @@ class TreeItemWidget extends StatelessWidget {
   }
 }
 
-class TreeModel {
-  TreeData treeData;
+class GuideModel {
+  GuideData guideData;
 
-  TreeModel(this.treeData);
+  GuideModel(this.guideData);
 }

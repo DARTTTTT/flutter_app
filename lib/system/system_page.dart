@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:news/home/home_page.dart';
 import 'package:news/model/Content.dart';
+import 'package:news/system/guide_page.dart';
 import 'package:news/system/tree_page.dart';
 
 class SystemPage extends StatefulWidget {
@@ -45,7 +44,7 @@ class Page extends State<SystemPage> {
           preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
         ),
         body: TabBarView(
-          children:[TreePage(),TreePage()],
+          children:[TreePage(),GuidePage()],
         ),
       ),
     );

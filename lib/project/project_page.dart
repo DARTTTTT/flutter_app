@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
 import 'package:news/model/project_entity.dart';
-import 'package:news/project/project_item_page.dart';
+import 'package:news/project/item_project_page.dart';
 
 class ProjectPage extends StatefulWidget {
   @override
@@ -69,7 +69,7 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
           ),
           body: TabBarView(
             children: List.generate(_projectTreeList.length,
-                (index) => ProjectItemPage(_projectTreeList[index].id)),
+                (index) => ProjectItemPage(Api.PROJECT_LIST_URL,_projectTreeList[index].id)),
           ),
         ),
       );
