@@ -59,6 +59,7 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
                   indicatorColor: Colors.red,
                   indicatorSize: TabBarIndicatorSize.label,
                   isScrollable: true,
+                  labelStyle: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
                   tabs: _projectTreeList
                       .map((ProjectData) => Tab(
                             text: ProjectData.name,

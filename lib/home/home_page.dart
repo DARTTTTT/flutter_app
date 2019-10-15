@@ -65,48 +65,46 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       childWidget = new Stack(
         children: <Widget>[
           MediaQuery.removePadding(
-            removeTop: true,
-            context: context,
+              removeTop: true,
+              context: context,
+              child: NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollUpdateNotification &&
+                      notification.depth == 0) {
+                    _onScrol(notification.metrics.pixels);
+                  }
+                  return false;
+                },
+                child: RefreshIndicator(
+                  onRefresh: _refresh,
+                  color: Colors.red,
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: new Container(
+                          child: BannerView(),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 8,
+                                    style: BorderStyle.solid,
+                                    color: Colors.grey[200])),
+                          ),
+                        ),
+                      ),
+                      SliverFixedExtentList(
+                        delegate: SliverChildBuilderDelegate(_buildListItem,
+                            childCount: _items_article.length),
+                        itemExtent: 120.0,
+                      ),
+                    ],
+                    controller: scrollController,
+                  ),
+                ),
+              )
 
-               child: NotificationListener(
-                    onNotification: (notification) {
-                      if (notification is ScrollUpdateNotification &&
-                          notification.depth == 0) {
-                        _onScrol(notification.metrics.pixels);
-                      }
-                      return false;
-                    },
-                 child: RefreshIndicator(
-                   onRefresh: _refresh,
-                   color: Colors.red,
-                   child: CustomScrollView(
-                     slivers: <Widget>[
-                       SliverToBoxAdapter(
-                         child: new Container(
-                           child: BannerView(),
-                           decoration: BoxDecoration(
-                             border: Border(
-                                 bottom: BorderSide(
-                                     width: 8,
-                                     style: BorderStyle.solid,
-                                     color: Colors.grey[200])),
-                           ),
-                         ),
-                       ),
-                       SliverFixedExtentList(
-                         delegate: SliverChildBuilderDelegate(_buildListItem,
-                             childCount: _items_article.length),
-                         itemExtent: 100.0,
-                       ),
-                     ],
-                     controller: scrollController,
-                   ),
-                 ),
-               )
-
-
-            // )
-          ),
+              // )
+              ),
           Opacity(
             opacity: appBarAlpha,
             child: Container(
@@ -115,12 +113,18 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                 backgroundColor: Colors.red,
                 title: Text(
                   '首页',
-                  style: TextStyle(fontSize: 15.0),
+                  style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
                 ),
                 //centerTitle: true,
               ),
             ),
-          )
+          ),
+          /*FloatingActionButton(
+            backgroundColor: Colors.red,
+            tooltip: 'Increment',
+            child: new Icon(Icons.search),
+
+          )*/
         ],
       );
     } else {
@@ -220,7 +224,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    fontSize: 14.0, color: Colors.black),
+                                    fontSize: Content.TEXT_CONTENT_SIZE,
+                                    color: Colors.black),
                               ),
                               new Padding(padding: EdgeInsets.only(top: 10)),
                               Text(
@@ -228,7 +233,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    fontSize: 12.0, color: Colors.black45),
+                                    fontSize: Content.TEXT_CONTENT_SECOND_SIZE,
+                                    color: Colors.black45),
                               ),
                             ],
                           ),
@@ -311,8 +317,9 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                             articleModel.articleDataData.title,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
-                            style:
-                                TextStyle(fontSize: 14.0, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: Content.TEXT_CONTENT_SIZE,
+                                color: Colors.black),
                           ),
                         ),
                       ],

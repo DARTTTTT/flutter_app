@@ -35,6 +35,8 @@ class Page extends State<SystemPage> {
                 indicatorColor: Colors.red,
                 indicatorSize: TabBarIndicatorSize.label,
                 isScrollable: true,
+                labelStyle: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
+
                 tabs: tabs
                     .map((e) => Tab(
                           text: e,

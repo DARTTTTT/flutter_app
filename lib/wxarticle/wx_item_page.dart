@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/home/ItemDetail.dart';
 import 'package:news/model/Api.dart';
+import 'package:news/model/Content.dart';
 import 'package:news/model/article_entity.dart';
 import 'package:news/model/banner_entity.dart';
 
@@ -75,7 +76,7 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
                   SliverFixedExtentList(
                     delegate: SliverChildBuilderDelegate(_buildListItem,
                         childCount: _items_article.length),
-                    itemExtent: 100.0,
+                    itemExtent: 120.0,
                   ),
                 ],
                 controller: scrollController,
@@ -182,7 +183,7 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    fontSize: 14.0, color: Colors.black),
+                                    fontSize: Content.TEXT_CONTENT_SIZE, color: Colors.black),
                               ),
                               new Padding(padding: EdgeInsets.only(top: 10)),
                               Text(
@@ -190,7 +191,7 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    fontSize: 12.0, color: Colors.black45),
+                                    fontSize: Content.TEXT_CONTENT_SECOND_SIZE, color: Colors.black45),
                               ),
                             ],
                           ),
@@ -274,7 +275,7 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style:
-                                TextStyle(fontSize: 14.0, color: Colors.black),
+                                TextStyle(fontSize: Content.TEXT_CONTENT_SIZE, color: Colors.black),
                           ),
                         ),
                       ],
