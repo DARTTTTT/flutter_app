@@ -31,7 +31,13 @@ class _IndexState extends State<Index> {
     ),
   ];
 
-  final bodyList = [HomePage(), ProjectPage(), WxArticlePage(), SystemPage(), HomePage()];
+  final bodyList = [
+    HomePage(),
+    ProjectPage(),
+    WxArticlePage(),
+    SystemPage(),
+    HomePage()
+  ];
 
   final pageController = PageController();
   int currentIndex = 0;

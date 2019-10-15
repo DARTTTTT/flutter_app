@@ -45,7 +45,7 @@ class Page extends State<SystemPage> {
           preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
         ),
         body: TabBarView(
-          children: List.generate(2, (index) => TreePage()),
+          children:[TreePage(),TreePage()],
         ),
       ),
     );

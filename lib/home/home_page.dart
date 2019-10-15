@@ -75,6 +75,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         _onScrol(notification.metrics.pixels);
                       }
                     },*/
+
             child: RefreshIndicator(
               onRefresh: _refresh,
               color: Colors.red,

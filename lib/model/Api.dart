@@ -13,6 +13,8 @@ class Api {
   static const String WX_ARTICLE_CHAPTER_URL=BaseUrl+"wxarticle/chapters/json";
   //公众号列表
   static const String WX_ARTICLE_CHAPTER_LIST_URL=BaseUrl+"wxarticle/list/";
+  //体系
+  static const String SYSTEM_TREE_URL=BaseUrl+"tree/json";
 
 
 }
