@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:news/home/search_page.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
 import 'package:news/model/article_entity.dart';
@@ -28,6 +29,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   bool isPerformingRequest = false;
 
   double appBarAlpha = 0;
+  double floatAlpha = 1;
 
   @override
   void initState() {
@@ -65,66 +67,98 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       childWidget = new Stack(
         children: <Widget>[
           MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: NotificationListener(
-                onNotification: (notification) {
-                  if (notification is ScrollUpdateNotification &&
-                      notification.depth == 0) {
-                    _onScrol(notification.metrics.pixels);
-                  }
-                  return false;
-                },
-                child: RefreshIndicator(
-                  onRefresh: _refresh,
-                  color: Colors.red,
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverToBoxAdapter(
-                        child: new Container(
-                          child: BannerView(),
-                          decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    width: 8,
-                                    style: BorderStyle.solid,
-                                    color: Colors.grey[200])),
-                          ),
+            removeTop: true,
+            context: context,
+            child: NotificationListener(
+              onNotification: (notification) {
+                if (notification is ScrollUpdateNotification &&
+                    notification.depth == 0) {
+                  _onScrol(notification.metrics.pixels);
+                }
+                return false;
+              },
+              child: RefreshIndicator(
+                onRefresh: _refresh,
+                color: Colors.red,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: new Container(
+                        child: BannerView(),
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  width: 8,
+                                  style: BorderStyle.solid,
+                                  color: Colors.grey[200])),
                         ),
                       ),
-                      SliverFixedExtentList(
-                        delegate: SliverChildBuilderDelegate(_buildListItem,
-                            childCount: _items_article.length),
-                        itemExtent: 120.0,
-                      ),
-                    ],
-                    controller: scrollController,
-                  ),
+                    ),
+                    SliverFixedExtentList(
+                      delegate: SliverChildBuilderDelegate(_buildListItem,
+                          childCount: _items_article.length),
+                      itemExtent: 120.0,
+                    ),
+                  ],
+                  controller: scrollController,
                 ),
-              )
-
-              // )
               ),
+            ),
+
+            // )
+          ),
           Opacity(
             opacity: appBarAlpha,
             child: Container(
               height: MediaQuery.of(context).padding.top + Content.BAR_HEIGHT,
               child: AppBar(
                 backgroundColor: Colors.red,
+                centerTitle: true,
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      if (appBarAlpha == 1) {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => SearchPage()));
+                      }
+                    },
+                  ),
+                ],
                 title: Text(
-                  '首页',
-                  style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
+                  "玩安卓",
+                  style: TextStyle(
+                      fontSize: Content.TEXT_TITLE_SIZE, color: Colors.white),
                 ),
                 //centerTitle: true,
               ),
             ),
           ),
-          /*FloatingActionButton(
-            backgroundColor: Colors.red,
-            tooltip: 'Increment',
-            child: new Icon(Icons.search),
-
-          )*/
+          Positioned(
+            right: 30,
+            bottom: 20,
+            child: Opacity(
+                opacity: floatAlpha,
+                child: Container(
+                    height: 48,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      child: new Icon(Icons.search),
+                      onPressed: () {
+                        if (floatAlpha == 1) {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => SearchPage()));
+                        }
+                      },
+                    ))),
+          )
         ],
       );
     } else {
@@ -436,6 +470,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
     setState(() {
       appBarAlpha = alpha;
+      floatAlpha = 1 - alpha;
     });
   }
 
