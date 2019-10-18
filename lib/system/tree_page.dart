@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:news/manger/route_manger.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/tree_entity.dart';
 import 'package:news/system/item_tree_page.dart';

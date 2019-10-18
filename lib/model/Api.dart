@@ -26,4 +26,9 @@ class Api {
 
 //导航
   static const String SYSTEM_NAVI_URL = BaseUrl + "navi/json";
+
+  //搜索热词
+  static const String SEARCH_HOT_KEY_URL = BaseUrl + "hotkey/json";
+  //搜索
+  static const String SEARCH_RESULT_URL=BaseUrl+"article/query/";
 }

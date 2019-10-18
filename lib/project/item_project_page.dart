@@ -48,7 +48,9 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
       }
 
       if (scrollController.position.pixels ==
-          scrollController.position.minScrollExtent) {}
+          scrollController.position.minScrollExtent) {
+
+      }
     });
   }
 
