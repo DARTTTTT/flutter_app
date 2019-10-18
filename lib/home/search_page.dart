@@ -172,7 +172,10 @@ class Page extends State<SearchPage> {
                 new CupertinoPageRoute(
                     builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
-                          title: articleModel.articleDataData.title,
+                          title:   articleModel.articleDataData.title.replaceAll("<em", "").
+                          replaceAll("class=", "").
+                          replaceAll("highlight", "").replaceAll("'", "")
+                              .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                         )));
           },
           child: new Container(
@@ -228,7 +231,10 @@ class Page extends State<SearchPage> {
                           child: new Column(
                             children: <Widget>[
                               Text(
-                                articleModel.articleDataData.title,
+                                articleModel.articleDataData.title.replaceAll("<em", "").
+                                replaceAll("class=", "").
+                                replaceAll("highlight", "").replaceAll("'", "")
+                                    .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -276,7 +282,10 @@ class Page extends State<SearchPage> {
                 new CupertinoPageRoute(
                     builder: (context) => ItemInfoDetail(
                           url: articleModel.articleDataData.link,
-                          title: articleModel.articleDataData.title,
+                          title:   articleModel.articleDataData.title.replaceAll("<em", "").
+                          replaceAll("class=", "").
+                          replaceAll("highlight", "").replaceAll("'", "")
+                              .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                         )));
           },
           child: new Container(
@@ -322,7 +331,10 @@ class Page extends State<SearchPage> {
                           right: 15,
                           top: 5,
                           child: Text(
-                            articleModel.articleDataData.title,
+                            articleModel.articleDataData.title.replaceAll("<em", "").
+                            replaceAll("class=", "").
+                            replaceAll("highlight", "").replaceAll("'", "")
+                                .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(

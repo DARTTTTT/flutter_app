@@ -254,7 +254,10 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                           child: new Column(
                             children: <Widget>[
                               Text(
-                                articleModel.articleDataData.title,
+                                articleModel.articleDataData.title.replaceAll("<em", "").
+                                replaceAll("class=", "").
+                                replaceAll("highlight", "").replaceAll("'", "")
+                                    .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -348,7 +351,10 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                           right: 15,
                           top: 5,
                           child: Text(
-                            articleModel.articleDataData.title,
+                            articleModel.articleDataData.title.replaceAll("<em", "").
+                            replaceAll("class=", "").
+                            replaceAll("highlight", "").replaceAll("'", "")
+                                .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(
