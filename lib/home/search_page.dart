@@ -422,7 +422,7 @@ class Page extends State<SearchPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "热门搜索",
+                "大家都在搜",
                 style: TextStyle(fontSize: 15.0),
               ),
               Wrap(
@@ -445,7 +445,7 @@ class Page extends State<SearchPage> {
                               hotkeyEntity.data[index].name,
                               maxLines: 1,
                               style: TextStyle(
-                                  fontSize: 13.0, color: Colors.black45),
+                                  fontSize: 14.0, color: Colors.black45),
                             ),
                           )))
             ],

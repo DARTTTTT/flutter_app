@@ -206,12 +206,35 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                   new Expanded(
                     child: new Row(
                       children: <Widget>[
-                        new Padding(padding: EdgeInsets.only(left: 15)),
-                        Text(
-                          articleModel.articleDataData.superChapterName +
-                              "·" +
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Container(
+                            child: Text(
+                              articleModel.articleDataData.superChapterName ,
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: Container(
+                            child: Text(
                               articleModel.articleDataData.chapterName,
-                          style: TextStyle(fontSize: 11.0),
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                           decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
                         ),
                       ],
                     ),
@@ -288,12 +311,35 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                   new Expanded(
                     child: new Row(
                       children: <Widget>[
-                        new Padding(padding: EdgeInsets.only(left: 15)),
-                        Text(
-                          articleModel.articleDataData.superChapterName +
-                              "·" +
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Container(
+                            child: Text(
+                              articleModel.articleDataData.superChapterName ,
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: Container(
+                            child: Text(
                               articleModel.articleDataData.chapterName,
-                          style: TextStyle(fontSize: 11.0),
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          /* decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),*/
                         ),
                       ],
                     ),

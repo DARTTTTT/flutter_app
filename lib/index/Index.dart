@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/home/home_page.dart';
+import 'package:news/info/Info.dart';
 import 'package:news/project/project_page.dart';
 import 'package:news/system/system_page.dart';
 import 'package:news/wxarticle/wx_article_page.dart';
@@ -12,7 +13,7 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   final items = [
-    BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
+    BottomNavigationBarItem(icon: Icon(Icons.tag_faces), title: Text("首页")),
     BottomNavigationBarItem(
       icon: Icon(Icons.all_inclusive),
       title: Text("发现"),
@@ -36,7 +37,7 @@ class _IndexState extends State<Index> {
     ProjectPage(),
     WxArticlePage(),
     SystemPage(),
-    HomePage()
+    Info()
   ];
 
   final pageController = PageController();
@@ -63,7 +64,7 @@ class _IndexState extends State<Index> {
         fixedColor: Colors.red,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 13.0,
-        unselectedFontSize: 12.0,
+        unselectedFontSize: 13.0,
       ),
       body: PageView(
         controller: pageController,

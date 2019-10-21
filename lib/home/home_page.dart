@@ -254,10 +254,15 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                           child: new Column(
                             children: <Widget>[
                               Text(
-                                articleModel.articleDataData.title.replaceAll("<em", "").
-                                replaceAll("class=", "").
-                                replaceAll("highlight", "").replaceAll("'", "")
-                                    .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
+                                articleModel.articleDataData.title
+                                    .replaceAll("<em", "")
+                                    .replaceAll("class=", "")
+                                    .replaceAll("highlight", "")
+                                    .replaceAll("'", "")
+                                    .replaceAll(">", "")
+                                    .replaceAll("</em", "")
+                                    .replaceAll("&", "")
+                                    .trim(),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -283,12 +288,35 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   new Expanded(
                     child: new Row(
                       children: <Widget>[
-                        new Padding(padding: EdgeInsets.only(left: 15)),
-                        Text(
-                          articleModel.articleDataData.superChapterName +
-                              "·" +
-                              articleModel.articleDataData.chapterName,
-                          style: TextStyle(fontSize: 11.0),
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Container(
+                            child: Text(
+                              articleModel.articleDataData.superChapterName ,
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border:
+                                new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: Container(
+                            child: Text(
+                                  articleModel.articleDataData.chapterName,
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
                         ),
                       ],
                     ),
@@ -351,10 +379,15 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                           right: 15,
                           top: 5,
                           child: Text(
-                            articleModel.articleDataData.title.replaceAll("<em", "").
-                            replaceAll("class=", "").
-                            replaceAll("highlight", "").replaceAll("'", "")
-                                .replaceAll(">", "").replaceAll("</em", "").replaceAll("&", "").trim(),
+                            articleModel.articleDataData.title
+                                .replaceAll("<em", "")
+                                .replaceAll("class=", "")
+                                .replaceAll("highlight", "")
+                                .replaceAll("'", "")
+                                .replaceAll(">", "")
+                                .replaceAll("</em", "")
+                                .replaceAll("&", "")
+                                .trim(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(
@@ -369,12 +402,35 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   new Expanded(
                     child: new Row(
                       children: <Widget>[
-                        new Padding(padding: EdgeInsets.only(left: 15)),
-                        Text(
-                          articleModel.articleDataData.superChapterName +
-                              "·" +
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Container(
+                            child: Text(
+                              articleModel.articleDataData.superChapterName ,
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 5),
+                          child: Container(
+                            child: Text(
                               articleModel.articleDataData.chapterName,
-                          style: TextStyle(fontSize: 11.0),
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                         /* decoration: BoxDecoration(
+                            border:
+                            new Border.all(color: Colors.red, width: 0.5),
+                            shape: BoxShape.rectangle,
+                            borderRadius: new BorderRadius.circular(3.0),
+                          ),*/
                         ),
                       ],
                     ),
