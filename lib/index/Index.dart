@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/home/home_page.dart';
-import 'package:news/info/Info.dart';
+import 'package:news/my/my.dart';
 import 'package:news/project/project_page.dart';
 import 'package:news/system/system_page.dart';
 import 'package:news/wxarticle/wx_article_page.dart';
@@ -37,7 +37,7 @@ class _IndexState extends State<Index> {
     ProjectPage(),
     WxArticlePage(),
     SystemPage(),
-    Info()
+    MyPage()
   ];
 
   final pageController = PageController();
