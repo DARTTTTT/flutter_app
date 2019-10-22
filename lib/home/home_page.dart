@@ -205,6 +205,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(
+
                         width: 0.5,
                         style: BorderStyle.solid,
                         color: Colors.grey[200])),

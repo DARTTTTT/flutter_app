@@ -1,5 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/model/Content.dart';
+import 'package:news/user/login_page.dart';
 import 'package:news/view/head_bottom_view.dart';
 
 class MyPage extends StatefulWidget {
@@ -27,10 +28,9 @@ class Page extends State<MyPage> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.red,
                       gradient: LinearGradient(
                           //渐变色
-                          colors: [Colors.red, Colors.deepOrangeAccent],
+                          colors: [Colors.red[200], Colors.deepOrangeAccent],
                           //  blue deepOrangeAccent
                           begin: Alignment.centerRight,
                           //起点
@@ -40,20 +40,43 @@ class Page extends State<MyPage> {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(top: 50.0),
-                        child: Container(
-                            width: 80.0,
-                            height: 80.0,
-                            decoration: new BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                // border color
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "images/user_avatar.png"))))),
+                        child: InkWell(
+                          child: Hero(
+                            tag: "avatar",
+                            child: ClipOval(
+                              child: Container(
+                                  width: 80.0,
+                                  height: 80.0,
+                                  decoration: new BoxDecoration(
+                                      color: const Color(0xFFFFFFFF),
+                                      // border color
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              "images/user_avatar.png")))
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          },
+                        )),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
-                      child: Container(
-                        child: Text("登录/注册",style: TextStyle(fontSize: 16,color: Colors.white),),
+                      child: InkWell(
+                        child: Text(
+                          "登录/注册",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
                       ),
                     )
                   ],
@@ -87,7 +110,6 @@ class Page extends State<MyPage> {
                 color: Colors.red,
               ),
               trailing: Icon(Icons.chevron_right),
-
             ),
             ListTile(
               title: Text("设置"),
