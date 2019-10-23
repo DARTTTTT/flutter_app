@@ -94,10 +94,16 @@ class Page extends State<RegisterPage> {
                                   color: Colors.red,
                                   size: 18,
                                 ),
-                                suffixIcon: Icon(
-                                  Icons.clear,
-                                  color: Colors.grey[200],
-                                  size: 18,
+                                suffixIcon: InkWell(
+                                  child:Icon(
+                                    Icons.clear,
+                                    color: Colors.grey[200],
+                                    size: 18,
+                                  ),
+                                  onTap: (){
+                                    textNickController.clear();
+                                  },
+
                                 ),
                                 hintStyle: TextStyle(
                                     fontSize: 15, color: Colors.black45),
@@ -116,10 +122,12 @@ class Page extends State<RegisterPage> {
                               autofocus: false,
                               controller: textPassController,
                               cursorColor: Colors.red,
+                              obscureText: true,
 
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "密码",
+
                                 prefixIcon: Icon(
                                   Icons.lock_outline,
                                   color: Colors.red,
@@ -147,6 +155,7 @@ class Page extends State<RegisterPage> {
                               autofocus: false,
                               controller: textRePassController,
                               cursorColor: Colors.red,
+                              obscureText: true,
 
                               decoration: InputDecoration(
                                 border: InputBorder.none,

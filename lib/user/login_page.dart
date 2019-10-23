@@ -12,8 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class Page extends State<LoginPage> {
-  TextEditingController textEditingController = new TextEditingController();
-
+  TextEditingController textNickController = new TextEditingController();
+  TextEditingController textPassController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -76,7 +76,7 @@ class Page extends State<LoginPage> {
                             margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
                             child: TextField(
                               autofocus: false,
-                              controller: textEditingController,
+                              controller: textNickController,
                               cursorColor: Colors.red,
 
                               decoration: InputDecoration(
@@ -87,10 +87,16 @@ class Page extends State<LoginPage> {
                                   color: Colors.red,
                                   size: 18,
                                 ),
-                                suffixIcon: Icon(
-                                  Icons.clear,
-                                  color: Colors.grey[200],
-                                  size: 18,
+                                suffixIcon: InkWell(
+                                  child:Icon(
+                                    Icons.clear,
+                                    color: Colors.grey[200],
+                                    size: 18,
+                                  ),
+                                  onTap: (){
+                                    textNickController.clear();
+                                  },
+
                                 ),
                                 hintStyle: TextStyle(
                                     fontSize: 15, color: Colors.black45),
@@ -107,8 +113,9 @@ class Page extends State<LoginPage> {
                             margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
                             child: TextField(
                               autofocus: false,
-                              controller: textEditingController,
+                              controller: textPassController,
                               cursorColor: Colors.red,
+                              obscureText: true,
 
                               decoration: InputDecoration(
                                 border: InputBorder.none,
