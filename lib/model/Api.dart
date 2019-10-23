@@ -31,4 +31,10 @@ class Api {
   static const String SEARCH_HOT_KEY_URL = BaseUrl + "hotkey/json";
   //搜索
   static const String SEARCH_RESULT_URL=BaseUrl+"article/query/";
+  //注册
+  static const String REGISTER_URL=BaseUrl+"user/register";
+  //登录
+  static const String LOGIN_URL=BaseUrl+"user/login";
+  //登出
+  static const String LOGIN_OUT_URL=BaseUrl+"user/logout/json";
 }

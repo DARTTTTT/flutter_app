@@ -30,7 +30,7 @@ class Page extends State<MyPage> {
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           //渐变色
-                          colors: [Colors.red[200], Colors.deepOrangeAccent],
+                          colors: [Colors.red, Colors.red],
                           //  blue deepOrangeAccent
                           begin: Alignment.centerRight,
                           //起点
