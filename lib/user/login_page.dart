@@ -1,7 +1,17 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news/index/Index.dart';
+import 'package:news/model/Api.dart';
+import 'package:news/model/Content.dart';
+import 'package:news/my/my.dart';
 import 'package:news/user/register_page.dart';
 import 'package:news/view/head_bottom_view.dart';
+import 'package:news/model/user_entity.dart';
+import 'package:news/view/load_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +24,15 @@ class LoginPage extends StatefulWidget {
 class Page extends State<LoginPage> {
   TextEditingController textNickController = new TextEditingController();
   TextEditingController textPassController = new TextEditingController();
+  ValueNotifier<bool> obscureNotifier = ValueNotifier<bool>(false);
+
+  @override
+  void dispose() {
+    textNickController.dispose();
+    textPassController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -88,15 +107,14 @@ class Page extends State<LoginPage> {
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
-                                  child:Icon(
+                                  child: Icon(
                                     Icons.clear,
                                     color: Colors.grey[200],
                                     size: 18,
                                   ),
-                                  onTap: (){
+                                  onTap: () {
                                     textNickController.clear();
                                   },
-
                                 ),
                                 hintStyle: TextStyle(
                                     fontSize: 15, color: Colors.black45),
@@ -115,7 +133,7 @@ class Page extends State<LoginPage> {
                               autofocus: false,
                               controller: textPassController,
                               cursorColor: Colors.red,
-                              obscureText: true,
+                              obscureText: !obscureNotifier.value,
 
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -125,10 +143,22 @@ class Page extends State<LoginPage> {
                                   color: Colors.red,
                                   size: 18,
                                 ),
-                                suffixIcon: Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.grey[200],
-                                  size: 18,
+                                suffixIcon: InkWell(
+                                  child: ValueListenableBuilder(
+                                    valueListenable: obscureNotifier,
+                                    builder: (context, value, child) => Icon(
+                                      Icons.remove_red_eye,
+                                      size: 18,
+                                      color:
+                                          value ? Colors.red : Colors.grey[200],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      obscureNotifier.value =
+                                          !obscureNotifier.value;
+                                    });
+                                  },
                                 ),
                                 hintStyle: TextStyle(
                                     fontSize: 15, color: Colors.black45),
@@ -155,7 +185,16 @@ class Page extends State<LoginPage> {
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 15.0),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return new NetLoadingDialog(
+                                        dismissDialog: _dismissCallBack,
+                                        outsideDismiss: true,
+                                      );
+                                    });
+                              },
                             ),
                           ),
                           Container(
@@ -169,7 +208,8 @@ class Page extends State<LoginPage> {
                                     TextSpan(
                                         text: "还没账号？",
                                         style: TextStyle(
-                                            color: Colors.black45, fontSize: 13)),
+                                            color: Colors.black45,
+                                            fontSize: 13)),
                                     TextSpan(
                                         text: "去注册",
                                         style: TextStyle(
@@ -177,9 +217,12 @@ class Page extends State<LoginPage> {
                                   ]))
                                 ],
                               ),
-                           onTap: (){
-                                Navigator.push(context, new CupertinoPageRoute(builder: (context)=>RegisterPage()));
-                           },
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    new CupertinoPageRoute(
+                                        builder: (context) => RegisterPage()));
+                              },
                             ),
                           )
                         ],
@@ -196,4 +239,32 @@ class Page extends State<LoginPage> {
       ),
     );
   }
+
+  _dismissCallBack(Function function) {
+    postLogin(textNickController.text, textPassController.text, function);
+  }
+
+  Future postLogin(String userName, String pass, Function function) async {
+    Response response;
+    Dio dio = Dio();
+    response = await dio.post(Api.LOGIN_URL, queryParameters: {
+      "username": userName,
+      "password": pass,
+    });
+    function();
+
+
+    var jsonData = json.encode(response.data);
+    UserEntity userEntity = UserEntity.fromJson(response.data);
+    if (userEntity.errorCode == 0) {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString(Content.KEY_USER, jsonData);
+      Navigator.of(context).pop(userEntity.data.username);
+    }else{
+
+    }
+  }
+
+
 }

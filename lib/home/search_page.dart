@@ -478,9 +478,7 @@ class Page extends State<SearchPage> {
     _articleList.forEach((item) {
       article_items.add(ArticleModel(item));
     });
-    print("搜索内容: " + article_items.length.toString());
 
-    print(aritcle_data);
     setState(() {
       _items_article = article_items;
     });

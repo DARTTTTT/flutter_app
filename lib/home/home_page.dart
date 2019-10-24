@@ -559,7 +559,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     Response response;
     Dio dio = Dio();
     String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
-    print(url);
 
     response = await dio.get(url);
     Map aritcle_data = response.data;
@@ -570,7 +569,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       article_items.add(ArticleModel(item));
     });
 
-    print(aritcle_data);
     setState(() {
       _items_article = article_items;
     });
@@ -585,7 +583,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       Response response;
       Dio dio = Dio();
       String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
-      print(url);
 
       response = await dio.get(url);
       Map aritcle_data = response.data;
@@ -595,7 +592,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       _articleList.forEach((item) {
         article_items.add(ArticleModel(item));
       });
-      print(aritcle_data);
       setState(() {
         _items_article.addAll(article_items);
         isPerformingRequest = false;

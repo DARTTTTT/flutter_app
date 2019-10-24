@@ -5,5 +5,7 @@ class Content{
   static const double TEXT_CONTENT_SIZE=15;
   static const double TEXT_CONTENT_SECOND_SIZE=14;
 
+  static const String KEY_USER="user";
+
 
 }

@@ -1,7 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news/index/Index.dart';
+import 'package:news/model/Api.dart';
+import 'package:news/model/Content.dart';
 import 'package:news/user/login_page.dart';
 import 'package:news/view/head_bottom_view.dart';
+import 'package:news/view/load_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news/model/user_entity.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -12,6 +21,19 @@ class MyPage extends StatefulWidget {
 }
 
 class Page extends State<MyPage> {
+  String userName = "登录/注册";
+  bool isVisible = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    get();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -53,22 +75,22 @@ class Page extends State<MyPage> {
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                           image: AssetImage(
-                                              "images/user_avatar.png")))
-                              ),
+                                              "images/user_avatar.png")))),
                             ),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                          onTap: ()  async {
+
+
+                            userName= await Navigator.push(context, new MaterialPageRoute(builder: (context) => LoginPage()));
+
+                        //   print("返回的数据: "+result.toString());
                           },
                         )),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
                       child: InkWell(
                         child: Text(
-                          "登录/注册",
+                          userName,
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         onTap: () {
@@ -90,7 +112,7 @@ class Page extends State<MyPage> {
         SliverList(
           delegate: SliverChildListDelegate([
             ListTile(
-              title: Text("我的收藏"),
+              title: Text("收藏"),
               onTap: () {
                 // Navigator.of(context).pushNamed(RouteName.favouriteList);
               },
@@ -122,6 +144,29 @@ class Page extends State<MyPage> {
               ),
               trailing: Icon(Icons.chevron_right),
             ),
+            Offstage(
+              offstage: !isVisible,
+              child: ListTile(
+                title: Text("退出"),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return new NetLoadingDialog(
+                          dismissDialog: _dismissCallBack,
+                          outsideDismiss: true,
+                        );
+                      });
+
+                  //    Navigator.pushNamed(context, RouteName.setting);
+                },
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.red,
+                ),
+                trailing: Icon(Icons.chevron_right),
+              ),
+            ),
             SizedBox(
               height: 30,
             )
@@ -130,49 +175,59 @@ class Page extends State<MyPage> {
       ],
     ));
   }
-}
 
-class UserListWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var iconColor = Theme.of(context).accentColor;
-    return ListTileTheme(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-      child: SliverList(
-        delegate: SliverChildListDelegate([
-          ListTile(
-            title: Text("我的收藏"),
-            onTap: () {
-              // Navigator.of(context).pushNamed(RouteName.favouriteList);
-            },
-            leading: Icon(
-              Icons.favorite_border,
-              color: iconColor,
-            ),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          ListTile(
-            title: Text("关于"),
-            onTap: () {
-              //  switchDarkMode(context);
-            },
-          ),
-          ListTile(
-            title: Text("设置"),
-            onTap: () {
-              //    Navigator.pushNamed(context, RouteName.setting);
-            },
-            leading: Icon(
-              Icons.settings,
-              color: iconColor,
-            ),
-            trailing: Icon(Icons.chevron_right),
-          ),
-          SizedBox(
-            height: 30,
-          )
-        ]),
-      ),
-    );
+  Future get() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var user = prefs.getString(Content.KEY_USER);
+    if (user != null) {
+      Map<String, dynamic> map = json.decode(user);
+      UserEntity userEntity = UserEntity.fromJson(map);
+      print("用户名:" + userEntity.data.username);
+      userName = userEntity.data.username;
+      isVisible = true;
+      setState(() {
+
+      });
+    } else {
+      userName = "登录/注册";
+      isVisible = false;
+      setState(() {
+
+      });
+    }
+  }
+
+
+
+  _dismissCallBack(Function function) async {
+    Response response;
+    Dio dio = Dio();
+    response = await dio.get(Api.LOGIN_OUT_URL);
+    function();
+    UserEntity userEntity= UserEntity.fromJson(response.data);
+    if(userEntity.errorCode==0){
+      SharedPreferences prefs =
+      await SharedPreferences.getInstance();
+      prefs.remove(Content.KEY_USER);
+      prefs.clear();
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return new AlertDialog(
+              title: Text(
+                "退出成功",
+                style: TextStyle(fontSize: 15),
+              ),
+            );
+          });
+
+      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context)=>new Index(),),(route)=>route==null);
+
+
+
+    }
   }
 }
+
+
+
