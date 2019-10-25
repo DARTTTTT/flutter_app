@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/index/Index.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
-import 'package:news/my/my.dart';
-import 'package:news/user/register_page.dart';
-import 'package:news/view/head_bottom_view.dart';
 import 'package:news/model/user_entity.dart';
+import 'package:news/user/register_page.dart';
+import 'package:news/user/user_model.dart';
+import 'package:news/view/head_bottom_view.dart';
 import 'package:news/view/load_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -253,18 +253,28 @@ class Page extends State<LoginPage> {
     });
     function();
 
-
     var jsonData = json.encode(response.data);
     UserEntity userEntity = UserEntity.fromJson(response.data);
     if (userEntity.errorCode == 0) {
+
+
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       sharedPreferences.setString(Content.KEY_USER, jsonData);
       Navigator.of(context).pop(userEntity.data.username);
-    }else{
 
+
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return new AlertDialog(
+              title: Text(
+                userEntity.errorMsg,
+                style: TextStyle(fontSize: 15),
+              ),
+            );
+          });
     }
   }
-
-
 }

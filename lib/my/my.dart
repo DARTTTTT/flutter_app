@@ -7,8 +7,10 @@ import 'package:news/index/Index.dart';
 import 'package:news/model/Api.dart';
 import 'package:news/model/Content.dart';
 import 'package:news/user/login_page.dart';
+import 'package:news/user/user_model.dart';
 import 'package:news/view/head_bottom_view.dart';
 import 'package:news/view/load_page.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:news/model/user_entity.dart';
 
@@ -81,7 +83,17 @@ class Page extends State<MyPage> {
                           onTap: ()  async {
 
 
-                            userName= await Navigator.push(context, new MaterialPageRoute(builder: (context) => LoginPage()));
+                           String title= await Navigator.push(context, new MaterialPageRoute(builder: (context) => LoginPage()));
+
+                            if(userName!=null){
+                              setState(() {
+                                userName=title;
+                              });
+                            }else{
+                              setState(() {
+                                userName="登录/注册";
+                              });
+                            }
 
                         //   print("返回的数据: "+result.toString());
                           },
