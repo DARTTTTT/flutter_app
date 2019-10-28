@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:news/model/Api.dart';
+import 'package:news/entity/Api.dart';
 
 class NetUtil {
   //get请求

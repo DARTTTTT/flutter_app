@@ -1,37 +1,39 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:news/config/manger.dart';
-import 'package:news/model/user_entity.dart';
+import 'package:news/entity/user_entity.dart';
 
 class UserModel extends ChangeNotifier{
   static const String kUser = 'kUser';
 
 
-  UserEntity userEntity;
+  UserEntity _userEntity;
 
-  UserEntity get user => userEntity;
+  UserEntity get userEntity => _userEntity;
 
-  bool get hasUser => user != null;
+  bool get hasUserEntity => userEntity != null;
 
   UserModel() {
     var userMap = AppManger.localStorage.getItem(kUser);
-    userEntity = userMap != null ?UserEntity.fromJson(userMap) : null;
+    _userEntity = userMap != null ?UserEntity.fromJson(userMap) : null;
   }
 
   saveUser(UserEntity userEntity){
-    userEntity=userEntity;
+    _userEntity=userEntity;
     notifyListeners();
-    AppManger.localStorage.setItem(kUser, user);
+    AppManger.localStorage.setItem(kUser, userEntity);
 
   }
 
 
   /// 清除持久化的用户数据
   clearUser() {
-    userEntity = null;
+    _userEntity = null;
     notifyListeners();
     AppManger.localStorage.deleteItem(kUser);
   }
+
+
 
 
 }

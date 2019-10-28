@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/model/Api.dart';
-import 'package:news/model/Content.dart';
-import 'package:news/model/register_entity.dart';
+import 'package:news/entity/Api.dart';
+import 'package:news/entity/Content.dart';
+import 'package:news/entity/register_entity.dart';
 import 'package:news/view/head_bottom_view.dart';
-import 'package:news/model/user_entity.dart';
+import 'package:news/entity/user_entity.dart';
 import 'package:news/view/load_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

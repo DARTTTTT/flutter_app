@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/home/ItemDetail.dart';
-import 'package:news/model/Api.dart';
-import 'package:news/model/article_entity.dart';
-import 'package:news/model/guide_entity.dart';
-import 'package:news/model/tree_entity.dart';
+import 'package:news/entity/Api.dart';
+import 'package:news/entity/article_entity.dart';
+import 'package:news/entity/guide_entity.dart';
+import 'package:news/entity/tree_entity.dart';
 import 'package:news/system/item_guide_page.dart';
 
 class GuidePage extends StatefulWidget {

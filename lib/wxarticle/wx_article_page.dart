@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:news/model/Api.dart';
-import 'package:news/model/Content.dart';
-import 'package:news/model/project_entity.dart';
+import 'package:news/entity/Api.dart';
+import 'package:news/entity/Content.dart';
+import 'package:news/entity/project_entity.dart';
 import 'package:news/project/item_project_page.dart';
 import 'package:news/wxarticle/wx_item_page.dart';
 

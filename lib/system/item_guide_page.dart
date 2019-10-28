@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/model/Api.dart';
-import 'package:news/model/Content.dart';
+import 'package:news/entity/Api.dart';
+import 'package:news/entity/Content.dart';
 import 'package:news/project/item_project_page.dart';
 import 'package:news/system/guide_page.dart';
 import 'package:news/system/tree_page.dart';

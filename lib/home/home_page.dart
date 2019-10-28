@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:news/home/search_page.dart';
-import 'package:news/model/Api.dart';
-import 'package:news/model/Content.dart';
-import 'package:news/model/article_entity.dart';
-import 'package:news/model/banner_entity.dart';
+import 'package:news/entity/Api.dart';
+import 'package:news/entity/Content.dart';
+import 'package:news/entity/article_entity.dart';
+import 'package:news/entity/banner_entity.dart';
 
 import 'ItemDetail.dart';
 
