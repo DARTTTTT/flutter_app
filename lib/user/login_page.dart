@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:news/entity/Api.dart';
 import 'package:news/entity/Content.dart';
@@ -10,7 +9,7 @@ import 'package:news/entity/user_entity.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/register_page.dart';
 import 'package:news/view/head_bottom_view.dart';
-import 'package:news/view/load_page.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -240,8 +239,6 @@ class Page extends State<LoginPage> {
         ],
       ),
     );
-
-
   }
 
   _dismissCallBack(Function function) {
@@ -288,26 +285,33 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var model = Provider.of<LoginModel>(context);
-    print("有:"+model.toString());
+    print("有:" + model.toString());
     // TODO: implement build
     return LoginButtonWidget(
-        child: Text(
-          "登录",
-          style: TextStyle(fontSize: 15, color: Colors.white),
-        ),
+        child: model.busy
+            ? ButtonProgressIndicator()
+            : Text(
+                "登录",
+                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
         onPressed: () {
-          /*var formState = Form.of(context);
-          if (formState.validate()) {*/
+          print("点击: "+nameController.text);
+          if (nameController.text == "") {
+              showToast("请输入账号");
+          } else if (passwordController.text == "") {
+            showToast("请输入密码");
+
+          } else {
             model
                 .login(nameController.text, passwordController.text)
                 .then((value) {
               if (value) {
                 Navigator.of(context).pop(true);
               } else {
-                print("得到: "+value.toString());
+                showToast("登录失败");
               }
             });
-          //}
+          }
         });
   }
 }

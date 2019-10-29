@@ -3,16 +3,14 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/config/manger.dart';
-import 'package:news/index/Index.dart';
 import 'package:news/entity//Api.dart';
 import 'package:news/entity/Content.dart';
 import 'package:news/entity/user_entity.dart';
+import 'package:news/index/Index.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/login_page.dart';
 import 'package:news/user/user_model.dart';
 import 'package:news/view/head_bottom_view.dart';
-import 'package:news/view/load_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,7 +42,7 @@ class Page extends State<MyPage> {
     print("是否登录: "+userModel.hasUserEntity.toString());
     if(userModel.hasUserEntity==true){
       var loginModel=Provider.of<LoginModel>(context);
-    /*  String name=loginModel.getLoginName();
+      /*String name=loginModel.getLoginName();
       print("昵称:"+name);*/
     }
 
@@ -177,6 +175,9 @@ class Page extends State<MyPage> {
                           });
 */
 
+                    /*  var loginModel=Provider.of<LoginModel>(context);
+                      loginModel.logout();*/
+
                       userModel.clearUser();
 
 
@@ -224,7 +225,6 @@ class Page extends State<MyPage> {
     if (userEntity.errorCode == 0) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove(Content.KEY_USER);
-
       prefs.clear();
       showDialog(
           context: context,

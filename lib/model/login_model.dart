@@ -1,5 +1,8 @@
 
 
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:news/base/app_repository.dart';
 import 'package:news/config/manger.dart';
@@ -19,16 +22,17 @@ class LoginModel extends ViewStateModel{
     return AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
   }
   Future<bool> login(loginName, password) async {
+    setBusy(true);
     try{
-      var user=await AppRepository.login(loginName, password);
-      userModel.saveUser(user);
-      debugPrint("测试: "+user.data.username);
-      AppManger.sharedPreferences.setString(Content.KEY_USER_NAME, user.data.username);
-
+      Response response=await AppRepository.login(loginName, password);
+      var jsonData = json.encode(response.data);
+      userModel.saveUser(jsonData);
+      setBusy(false);
       return true;
     }
     catch(e){
       debugPrint("测试: ");
+      setBusy(false);
       return false;
     }
 
