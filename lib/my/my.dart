@@ -11,6 +11,7 @@ import 'package:news/model/login_model.dart';
 import 'package:news/user/login_page.dart';
 import 'package:news/user/user_model.dart';
 import 'package:news/view/head_bottom_view.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,13 +39,8 @@ class Page extends State<MyPage> {
 
 
 
-    var userModel= Provider.of<UserModel>(context);
+    var userModel= Provider.of<LoginModel>(context);
     print("是否登录: "+userModel.hasUserEntity.toString());
-    if(userModel.hasUserEntity==true){
-      var loginModel=Provider.of<LoginModel>(context);
-      /*String name=loginModel.getLoginName();
-      print("昵称:"+name);*/
-    }
 
     return Scaffold(
         body: CustomScrollView(
@@ -105,7 +101,7 @@ class Page extends State<MyPage> {
                           padding: EdgeInsets.only(top: 20.0),
                           child: InkWell(
                             child: Text(
-                              userModel.hasUserEntity?"XX":"注册/登录",
+                              userModel.hasUserEntity?userModel.userEntity.data.nickname:"注册/登录",
                               style: TextStyle(
                                   fontSize: 16, color: Colors.white),
                             ),
@@ -161,27 +157,25 @@ class Page extends State<MyPage> {
                   trailing: Icon(Icons.chevron_right),
                 ),
                 Offstage(
-                  offstage: false,
+                  offstage: !userModel.hasUserEntity,
                   child: ListTile(
                     title: Text("退出"),
                     onTap: () {
-                    /*  showDialog(
+                     /* showDialog(
                           context: context,
                           builder: (context) {
                             return new NetLoadingDialog(
                               dismissDialog: _dismissCallBack,
                               outsideDismiss: true,
                             );
-                          });
-*/
+                          });*/
 
-                    /*  var loginModel=Provider.of<LoginModel>(context);
-                      loginModel.logout();*/
-
-                      userModel.clearUser();
+                      var loginModel=Provider.of<LoginModel>(context);
+                      loginModel.logout();
 
 
-                      //    Navigator.pushNamed(context, RouteName.setting);
+
+
                     },
                     leading: Icon(
                       Icons.exit_to_app,

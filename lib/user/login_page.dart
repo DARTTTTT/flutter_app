@@ -9,6 +9,7 @@ import 'package:news/entity/user_entity.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/register_page.dart';
 import 'package:news/view/head_bottom_view.dart';
+import 'package:news/view/login_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -241,39 +242,8 @@ class Page extends State<LoginPage> {
     );
   }
 
-  _dismissCallBack(Function function) {
-    postLogin(textNickController.text, textPassController.text, function);
-  }
 
-  Future postLogin(String userName, String pass, Function function) async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.post(Api.LOGIN_URL, queryParameters: {
-      "username": userName,
-      "password": pass,
-    });
-    function();
 
-    var jsonData = json.encode(response.data);
-    UserEntity userEntity = UserEntity.fromJson(response.data);
-    if (userEntity.errorCode == 0) {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      sharedPreferences.setString(Content.KEY_USER, jsonData);
-      Navigator.of(context).pop(userEntity.data.username);
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return new AlertDialog(
-              title: Text(
-                userEntity.errorMsg,
-                style: TextStyle(fontSize: 15),
-              ),
-            );
-          });
-    }
-  }
 }
 
 class LoginButton extends StatelessWidget {
@@ -284,28 +254,25 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<LoginModel>(context);
-    print("有:" + model.toString());
+    var loginModel = Provider.of<LoginModel>(context);
     // TODO: implement build
     return LoginButtonWidget(
-        child: model.busy
+        child: loginModel.busy
             ? ButtonProgressIndicator()
             : Text(
                 "登录",
                 style: TextStyle(fontSize: 15, color: Colors.white),
               ),
-        onPressed: () {
-          print("点击: "+nameController.text);
+        onPressed: loginModel.busy?null:() {
           if (nameController.text == "") {
               showToast("请输入账号");
           } else if (passwordController.text == "") {
             showToast("请输入密码");
-
           } else {
-            model
-                .login(nameController.text, passwordController.text)
+            loginModel.login(nameController.text, passwordController.text)
                 .then((value) {
               if (value) {
+                showToast("登录成功");
                 Navigator.of(context).pop(true);
               } else {
                 showToast("登录失败");
@@ -316,46 +283,4 @@ class LoginButton extends StatelessWidget {
   }
 }
 
-/// LoginPage 按钮样式封装
-class LoginButtonWidget extends StatelessWidget {
-  final Widget child;
-  final VoidCallback onPressed;
 
-  LoginButtonWidget({this.child, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    var color = Colors.red;
-    return Container(
-        height: 40,
-        width: double.infinity,
-        margin: EdgeInsets.fromLTRB(25, 40, 25, 0),
-        child: CupertinoButton(
-          padding: EdgeInsets.all(0),
-          color: color,
-          disabledColor: color,
-          borderRadius: BorderRadius.circular(110),
-          pressedOpacity: 0.5,
-          child: child,
-          onPressed: onPressed,
-        ));
-  }
-}
-
-class ButtonProgressIndicator extends StatelessWidget {
-  final double size;
-  final Color color;
-
-  ButtonProgressIndicator({this.size: 24, this.color: Colors.white});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: size,
-        height: size,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation(color),
-        ));
-  }
-}

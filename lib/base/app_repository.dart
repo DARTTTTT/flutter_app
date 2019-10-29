@@ -10,7 +10,19 @@ class AppRepository {
       "username": username,
       "password": password,
     });
-    return UserEntity.fromJson(response.data);
+    return response;
+  }
+
+  /// 注册
+  static Future register(String username, String password,String rePass) async {
+    Response response;
+    Dio dio = Dio();
+    response = await dio.post(Api.REGISTER_URL, queryParameters: {
+      "username": username,
+      "password": password,
+      "repassword": rePass
+    });
+    return response;
   }
 
   static Future logout()async{

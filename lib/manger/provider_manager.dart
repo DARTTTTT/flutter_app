@@ -1,5 +1,4 @@
 import 'package:news/model/login_model.dart';
-import 'package:news/user/user_model.dart';
 import 'package:provider/provider.dart';
 
 List<SingleChildCloneableWidget> providers = [
@@ -8,8 +7,7 @@ List<SingleChildCloneableWidget> providers = [
 
 /// 独立的model
 List<SingleChildCloneableWidget> independentServices = [
-  ChangeNotifierProvider<UserModel>.value(value: UserModel()),
-  ChangeNotifierProvider<LoginModel>.value(value: LoginModel(new UserModel())),
+  ChangeNotifierProvider<LoginModel>.value(value: LoginModel()),
 
 ];
 

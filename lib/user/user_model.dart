@@ -14,9 +14,9 @@ class UserModel extends ChangeNotifier {
 
   UserModel() {
     var userMap = AppManger.sharedPreferences.getString(Content.KEY_USER);
-    Map<String, dynamic> map = json.decode(userMap);
-    debugPrint("用户返回:" + userMap.toString());
     if (userMap != null) {
+      Map<String, dynamic> map = json.decode(userMap);
+      debugPrint("用户返回:" + userMap.toString());
       _userEntity = UserEntity.fromJson(map);
     } else {
       _userEntity = null;
@@ -24,6 +24,9 @@ class UserModel extends ChangeNotifier {
   }
 
   saveUser(var jsonData) {
+    Map<String, dynamic> map = json.decode(jsonData);
+    _userEntity = UserEntity.fromJson(map);
+    print("登录:"+_userEntity.data.nickname);
     notifyListeners();
     AppManger.sharedPreferences.setString(Content.KEY_USER, jsonData);
   }

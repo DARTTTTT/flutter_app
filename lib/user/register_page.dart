@@ -1,13 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/entity/Api.dart';
-import 'package:news/entity/Content.dart';
 import 'package:news/entity/register_entity.dart';
+import 'package:news/model/login_model.dart';
 import 'package:news/view/head_bottom_view.dart';
-import 'package:news/entity/user_entity.dart';
-import 'package:news/view/load_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news/view/login_widget.dart';
+import 'package:oktoast/oktoast.dart';
+
+import '../main.dart';
 
 class RegisterPage extends StatefulWidget {
   bool obscureText = false;
@@ -143,7 +142,6 @@ class Page extends State<RegisterPage> {
                               controller: textPassController,
                               cursorColor: Colors.red,
                               obscureText: !obscureNotifier.value,
-
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "密码",
@@ -224,32 +222,7 @@ class Page extends State<RegisterPage> {
                                     bottom: BorderSide(
                                         color: Colors.grey[200], width: 0.5))),
                           ),
-                          Container(
-                            height: 40,
-                            width: double.infinity,
-                            margin: EdgeInsets.fromLTRB(25, 40, 25, 0),
-                            child: RaisedButton(
-                              color: Colors.red,
-                              highlightColor: Colors.red[300],
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              child: Text(
-                                "注册",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15.0),
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return new NetLoadingDialog(
-                                        dismissDialog: _dismissCallBack,
-                                        outsideDismiss: true,
-                                      );
-                                    });
-                              },
-                            ),
-                          ),
+                          RegisterButton(textNickController,textPassController,textRePassController),
                         ],
                       ),
                     ),
@@ -265,59 +238,44 @@ class Page extends State<RegisterPage> {
     );
   }
 
-  Future postRegister(
-      String userName, String pass, String rePass, Function function) async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.post(Api.REGISTER_URL, queryParameters: {
-      "username": userName,
-      "password": pass,
-      "repassword": rePass
-    });
-    RegisterEntity registerEntity = RegisterEntity.fromJson(response.data);
-    setState(() {
-      this.registerEntity = registerEntity;
-    });
-    //此方法关闭加载动画
-    function();
-    String tip;
-    if (registerEntity.errorCode == 0) {
-      tip = "注册成功";
-      postLogin(userName, pass);
-    } else if (registerEntity.errorCode == -1) {
-      tip = registerEntity.errorMsg;
-    }
 
-    ScaffoldState scaffoldState = Scaffold.of(context);
-    scaffoldState.showSnackBar(SnackBar(
-      content: Text(
-        tip,
-        style: TextStyle(fontSize: 15),
-      ),
-    ));
-  }
+}
+class RegisterButton extends StatelessWidget {
+  final nameController;
+  final passwordController;
+  final rePassController;
 
-  _dismissCallBack(Function function) {
-    postRegister(textNickController.text, textPassController.text,
-        textRePassController.text, function);
-  }
+  RegisterButton(this.nameController, this.passwordController,this.rePassController);
 
-  Future postLogin(String userName, String pass) async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.post(Api.LOGIN_URL, queryParameters: {
-      "username": userName,
-      "password": pass,
-    });
-    String data = response.data.toString();
-    UserEntity userEntity = UserEntity.fromJson(response.data);
-    if (userEntity.errorCode == 0) {
-      save(data);
-    }
-  }
-
-  save(String map) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(Content.KEY_USER, map);
+  @override
+  Widget build(BuildContext context) {
+    var loginModel = Provider.of<LoginModel>(context);
+    // TODO: implement build
+    return LoginButtonWidget(
+        child: loginModel.busy
+            ? ButtonProgressIndicator()
+            : Text(
+          "注册",
+          style: TextStyle(fontSize: 15, color: Colors.white),
+        ),
+        onPressed: loginModel.busy?null:() {
+          if (nameController.text == "") {
+            showToast("请输入账号");
+          } else if (passwordController.text == "") {
+            showToast("请输入密码");
+          } else if(rePassController.text==""){
+            showToast("请再次输入密码");
+          }else {
+            loginModel.register(nameController.text, passwordController.text,rePassController.text)
+                .then((value) {
+              if (value) {
+                showToast("注册成功");
+                Navigator.of(context).pop(true);
+              } else {
+                showToast("注册失败");
+              }
+            });
+          }
+        });
   }
 }
