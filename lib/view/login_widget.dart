@@ -49,13 +49,11 @@ class ButtonProgressIndicator extends StatelessWidget {
 
 
 // ignore: camel_case_types
-/*class dialogProgressIndicator extends StatelessWidget{
+class DialogProgressIndicator extends StatelessWidget{
 
-   final String text;
+  final String text;
 
-
-   dialogProgressIndicator(this.text)
-
+  DialogProgressIndicator(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -78,4 +76,4 @@ class ButtonProgressIndicator extends StatelessWidget {
     );
   }
 
-}*/
+}

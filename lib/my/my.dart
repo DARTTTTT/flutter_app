@@ -158,7 +158,7 @@ class Page extends State<MyPage> {
                 ),
                 Offstage(
                   offstage: !userModel.hasUserEntity,
-                  child: ListTile(
+                  child: loginModel.busy?DialogProgressIndicator("正在退出"):ListTile(
                     title: Text("退出"),
                     onTap: () {
                       loginModel.logout();
