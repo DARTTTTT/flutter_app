@@ -38,6 +38,9 @@ dev_dependencies:
   flutter_spinkit: ^4.0.0
   shared_preferences: ^0.5.4
   localstorage: ^3.0.0
+  cookie_jar: ^1.0.0
+  dio_cookie_manager: ^1.0.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

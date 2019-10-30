@@ -37,4 +37,6 @@ class Api {
   static const String LOGIN_URL=BaseUrl+"user/login";
   //登出
   static const String LOGIN_OUT_URL=BaseUrl+"user/logout/json";
+  //收藏列表
+  static const String LIKE_URL=BaseUrl+"lg/collect/list/";
 }

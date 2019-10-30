@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:news/entity/Content.dart';
 
 
 /// LoginPage 按钮样式封装
@@ -75,5 +76,29 @@ class DialogProgressIndicator extends StatelessWidget{
       ),
     );
   }
+
+}
+
+// ignore: must_be_immutable
+class TitleBar extends StatelessWidget{
+
+  String text;
+
+  TitleBar(this.text);
+
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return PreferredSize(
+      child: AppBar(
+        backgroundColor: Colors.red,
+        title: Text(text,style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE,color: Colors.white),),
+      ),
+      preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
+    );
+  }
+
+
 
 }
