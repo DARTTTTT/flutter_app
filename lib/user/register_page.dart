@@ -8,6 +8,7 @@ import 'package:oktoast/oktoast.dart';
 
 import '../main.dart';
 
+// ignore: must_be_immutable
 class RegisterPage extends StatefulWidget {
   bool obscureText = false;
 
@@ -50,7 +51,7 @@ class Page extends State<RegisterPage> {
           SliverAppBar(
             actions: <Widget>[],
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            expandedHeight: 420 + MediaQuery.of(context).padding.top,
+            expandedHeight: 370 + MediaQuery.of(context).padding.top,
             flexibleSpace: Stack(
               children: <Widget>[
                 ClipPath(

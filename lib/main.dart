@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import 'index/Index.dart';
 import 'manger/provider_manager.dart';
-
 export 'package:provider/provider.dart';
 
 void main() async {

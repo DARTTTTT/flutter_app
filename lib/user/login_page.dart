@@ -1,18 +1,11 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/entity/Api.dart';
-import 'package:news/entity/Content.dart';
-import 'package:news/entity/user_entity.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/register_page.dart';
 import 'package:news/view/head_bottom_view.dart';
 import 'package:news/view/login_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -43,7 +36,7 @@ class Page extends State<LoginPage> {
           SliverAppBar(
             actions: <Widget>[],
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            expandedHeight: 400 + MediaQuery.of(context).padding.top,
+            expandedHeight: 350 + MediaQuery.of(context).padding.top,
             flexibleSpace: Stack(
               children: <Widget>[
                 ClipPath(
@@ -172,32 +165,7 @@ class Page extends State<LoginPage> {
                                     bottom: BorderSide(
                                         color: Colors.grey[200], width: 0.5))),
                           ),
-                          /* Container(
-                              height: 40,
-                              width: double.infinity,
-                              margin: EdgeInsets.fromLTRB(25, 40, 25, 0),
-                              child: RaisedButton(
-                                color: Colors.red,
-                                highlightColor: Colors.red[300],
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text(
-                                  "登录",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0),
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return new NetLoadingDialog(
-                                          dismissDialog: _dismissCallBack,
-                                          outsideDismiss: true,
-                                        );
-                                      });
-                                },
-                              ),
-                            ),*/
+
                           LoginButton(textNickController, textPassController),
                           Container(
                             width: double.infinity,

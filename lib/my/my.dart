@@ -9,8 +9,8 @@ import 'package:news/entity/user_entity.dart';
 import 'package:news/index/Index.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/login_page.dart';
-import 'package:news/user/user_model.dart';
 import 'package:news/view/head_bottom_view.dart';
+import 'package:news/view/login_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,13 +24,11 @@ class MyPage extends StatefulWidget {
 }
 
 class Page extends State<MyPage> {
-  String userName = "登录/注册";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    get();
   }
 
   @override
@@ -39,8 +37,10 @@ class Page extends State<MyPage> {
 
 
 
+
     var userModel= Provider.of<LoginModel>(context);
     print("是否登录: "+userModel.hasUserEntity.toString());
+    var loginModel=Provider.of<LoginModel>(context);
 
     return Scaffold(
         body: CustomScrollView(
@@ -71,7 +71,7 @@ class Page extends State<MyPage> {
                     Column(
                       children: [
                         Padding(
-                            padding: EdgeInsets.only(top: 50.0),
+                            padding: EdgeInsets.only(top: 90.0),
                             child: InkWell(
                               child: Hero(
                                 tag: "avatar",
@@ -88,7 +88,7 @@ class Page extends State<MyPage> {
                                                   "images/user_avatar.png")))),
                                 ),
                               ),
-                              onTap: () {
+                              onTap: userModel.hasUserEntity?null:() {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
@@ -105,7 +105,7 @@ class Page extends State<MyPage> {
                               style: TextStyle(
                                   fontSize: 16, color: Colors.white),
                             ),
-                            onTap: () {
+                            onTap:userModel.hasUserEntity?null: () {
                               Navigator.push(
                                   context,
                                   new MaterialPageRoute(
@@ -161,21 +161,7 @@ class Page extends State<MyPage> {
                   child: ListTile(
                     title: Text("退出"),
                     onTap: () {
-                     /* showDialog(
-                          context: context,
-                          builder: (context) {
-                            return new NetLoadingDialog(
-                              dismissDialog: _dismissCallBack,
-                              outsideDismiss: true,
-                            );
-                          });*/
-
-                      var loginModel=Provider.of<LoginModel>(context);
                       loginModel.logout();
-
-
-
-
                     },
                     leading: Icon(
                       Icons.exit_to_app,
@@ -195,47 +181,4 @@ class Page extends State<MyPage> {
 
   }
 
-  Future get() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var user = prefs.getString(Content.KEY_USER);
-    if (user != null) {
-      Map<String, dynamic> map = json.decode(user);
-      UserEntity userEntity = UserEntity.fromJson(map);
-      print("用户名:" + userEntity.data.username);
-      userName = userEntity.data.username;
-      setState(() {});
-    } else {
-      userName = "登录/注册";
-      setState(() {});
-    }
-  }
-
-  _dismissCallBack(Function function) async {
-    Response response;
-    Dio dio = Dio();
-    response = await dio.get(Api.LOGIN_OUT_URL);
-    function();
-    UserEntity userEntity = UserEntity.fromJson(response.data);
-    if (userEntity.errorCode == 0) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.remove(Content.KEY_USER);
-      prefs.clear();
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return new AlertDialog(
-              title: Text(
-                "退出成功",
-                style: TextStyle(fontSize: 15),
-              ),
-            );
-          });
-
-      Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(
-            builder: (context) => new Index(),
-          ),
-              (route) => route == null);
-    }
-  }
 }

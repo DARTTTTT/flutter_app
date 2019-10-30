@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 /// LoginPage 按钮样式封装
 class LoginButtonWidget extends StatelessWidget {
@@ -44,3 +46,36 @@ class ButtonProgressIndicator extends StatelessWidget {
         ));
   }
 }
+
+
+// ignore: camel_case_types
+/*class dialogProgressIndicator extends StatelessWidget{
+
+   final String text;
+
+
+   dialogProgressIndicator(this.text)
+
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SpinKitFadingCircle(
+            color: Colors.red,
+            size: 30.0,
+          ),
+          new Padding(padding: EdgeInsets.only(top: 10)),
+          Text(
+            text,
+            style: TextStyle(fontSize: 12.0, color: Colors.grey),
+          )
+        ],
+      ),
+    );
+  }
+
+}*/

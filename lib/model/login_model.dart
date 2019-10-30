@@ -25,6 +25,18 @@ class LoginModel extends ViewStateModel {
     return AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
   }
 
+  LoginModel() {
+    var userMap = AppManger.sharedPreferences.getString(Content.KEY_USER);
+    if (userMap != null) {
+      Map<String, dynamic> map = json.decode(userMap);
+      debugPrint("用户返回:" + userMap.toString());
+      _userEntity = UserEntity.fromJson(map);
+    } else {
+      _userEntity = null;
+    }
+  }
+
+
   /// 清除持久化的用户数据
   clearUser() {
     _userEntity = null;
