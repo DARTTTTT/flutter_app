@@ -10,22 +10,24 @@ import 'package:news/entity/Content.dart';
 import 'package:news/entity/register_entity.dart';
 import 'package:news/entity/user_entity.dart';
 import 'package:news/model/view_state_model.dart';
-
+import 'package:news/user/like_model.dart';
 
 class LoginModel extends ViewStateModel {
-
   UserEntity _userEntity;
 
   UserEntity get userEntity => _userEntity;
 
   bool get hasUserEntity => userEntity != null;
 
+  LikeModel likeModel;
+
+
 
   String getLoginName() {
     return AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
   }
 
-  LoginModel() {
+  LoginModel({@required this.likeModel}) {
     var userMap = AppManger.sharedPreferences.getString(Content.KEY_USER);
     if (userMap != null) {
       Map<String, dynamic> map = json.decode(userMap);
@@ -35,7 +37,6 @@ class LoginModel extends ViewStateModel {
       _userEntity = null;
     }
   }
-
 
   /// 清除持久化的用户数据
   clearUser() {
@@ -49,9 +50,32 @@ class LoginModel extends ViewStateModel {
   saveUser(var jsonData) {
     Map<String, dynamic> map = json.decode(jsonData);
     _userEntity = UserEntity.fromJson(map);
-    print("登录:" + _userEntity.data.nickname);
-    notifyListeners();
     AppManger.sharedPreferences.setString(Content.KEY_USER, jsonData);
+    print("登录:" + _userEntity.data.collectIds.toString());
+    likeModel.replaceAll(_userEntity.data.collectIds);
+    notifyListeners();
+
+  }
+
+  Future<bool> exist(String id) async {
+    try {
+      var userMap = AppManger.sharedPreferences.getString(Content.KEY_USER);
+      if (userMap != null) {
+        Map<String, dynamic> map = json.decode(userMap);
+        UserEntity _userEntity = UserEntity.fromJson(map);
+        List<int> ids = _userEntity.data.collectIds;
+        debugPrint(ids.toString()+"----"+id);
+        if (ids.toString().contains(id.toString())) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 
   //登录方法
@@ -69,8 +93,7 @@ class LoginModel extends ViewStateModel {
       } else {
         return false;
       }
-    }
-    catch (e) {
+    } catch (e) {
       setBusy(false);
       return false;
     }
@@ -79,23 +102,21 @@ class LoginModel extends ViewStateModel {
   //注册方法
   Future<bool> register(loginName, password, rePass) async {
     setBusy(true);
-    try{
-      Response response = await AppRepository.register(loginName, password, rePass);
-      RegisterEntity registerEntity=RegisterEntity.fromJson(response.data);
+    try {
+      Response response =
+          await AppRepository.register(loginName, password, rePass);
+      RegisterEntity registerEntity = RegisterEntity.fromJson(response.data);
       setBusy(false);
-      if(registerEntity.errorCode==0){
+      if (registerEntity.errorCode == 0) {
         return true;
-      }else{
+      } else {
         return false;
       }
     } catch (e) {
       setBusy(false);
       return false;
     }
-
-
   }
-
 
   //退出方法
   Future<bool> logout() async {
@@ -115,4 +136,34 @@ class LoginModel extends ViewStateModel {
     }
   }
 
+  Future<bool> collect(String id) async {
+    if (!hasUserEntity) {
+      return false;
+    }
+    setBusy(true);
+    try {
+      var response = await AppRepository.collect(id);
+
+      setBusy(false);
+      return true;
+    } catch (e) {
+      setError(e is Error ? e.toString() : e.message);
+      return false;
+    }
+  }
+
+  Future<bool> uncollect(String id) async {
+    if (!hasUserEntity) {
+      return false;
+    }
+    setBusy(true);
+    try {
+      var response = await AppRepository.uncollect(id);
+      setBusy(false);
+      return true;
+    } catch (e) {
+      setError(e is Error ? e.toString() : e.message);
+      return false;
+    }
+  }
 }

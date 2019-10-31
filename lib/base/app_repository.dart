@@ -27,4 +27,17 @@ class AppRepository {
     var response = await NetUtil().dio.get(Api.LOGIN_OUT_URL);
     return UserEntity.fromJson(response.data);
   }
+  
+  
+  static Future collect(String id) async{
+    String url=Api.COLLECT_URL+id+"/json";
+    var response=await NetUtil().dio.post(url);
+    return response;
+  }
+
+  static Future uncollect(String id) async{
+    String url=Api.UN_COLLECT_URL+id+"/json";
+    var response=await NetUtil().dio.post(url);
+    return response;
+  }
 }

@@ -4,7 +4,6 @@ class HeadBottomView extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     // TODO: implement getClip
-    print(size);
     var path = Path();
     path.lineTo(0, 0);//第一个点
     path.lineTo(0, size.height - 30);//第二个点

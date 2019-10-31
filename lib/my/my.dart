@@ -27,7 +27,7 @@ class Page extends State<MyPage> {
     // TODO: implement build
 
     var loginModel = Provider.of<LoginModel>(context);
-    print("是否登录: " + loginModel.hasUserEntity.toString());
+    debugPrint("是否登录: " + loginModel.hasUserEntity.toString());
 
     return Scaffold(
         body: CustomScrollView(

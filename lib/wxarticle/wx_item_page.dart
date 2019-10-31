@@ -402,7 +402,6 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
       article_items.add(ArticleModel(item));
     });
 
-    print(aritcle_data);
     setState(() {
       _items_article = article_items;
     });

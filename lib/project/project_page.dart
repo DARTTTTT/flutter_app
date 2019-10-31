@@ -84,7 +84,6 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
     Dio dio = Dio();
     Response response = await dio.get(Api.PROJECT_TREE_URL);
     Map data = response.data;
-    print("列表: " + data.toString());
     ProjectEntity projectEntity = ProjectEntity.fromJson(data);
 
     var items = [];

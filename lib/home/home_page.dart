@@ -8,6 +8,9 @@ import 'package:news/entity/Api.dart';
 import 'package:news/entity/Content.dart';
 import 'package:news/entity/article_entity.dart';
 import 'package:news/entity/banner_entity.dart';
+import 'package:news/main.dart';
+import 'package:news/model/login_model.dart';
+import 'package:news/user/like_model.dart';
 
 import 'ItemDetail.dart';
 
@@ -30,6 +33,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   double appBarAlpha = 0;
   double floatAlpha = 1;
+  bool itemType = true;
 
   @override
   void initState() {
@@ -185,76 +189,124 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildListItem(BuildContext context, int index) {
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
+
+    var model = Provider.of<LoginModel>(context);
+
+    var likeModel = Provider.of<LikeModel>(context);
+
+    if (articleModel.articleDataData.envelopePic != "") {
+      itemType = true;
+    } else {
+      itemType = false;
+    }
+
     if (index == _items_article.length - 1) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {
-      if (articleModel.articleDataData.envelopePic != "") {
-        childWidget = GestureDetector(
-          onTap: () {
-            //页面详情跳转
-            Navigator.push(
-                context,
-                new CupertinoPageRoute(
-                    builder: (context) => ItemInfoDetail(
-                          url: articleModel.articleDataData.link,
-                          title: articleModel.articleDataData.title,
-                        )));
-          },
-          child: new Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-
-                        width: 0.5,
-                        style: BorderStyle.solid,
-                        color: Colors.grey[200])),
-              ),
-              child: new Column(
-                children: <Widget>[
-                  new Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          top: 8,
-                          child: Text(
-                            articleModel.articleDataData.shareUser,
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.black45),
-                          ),
+      childWidget = GestureDetector(
+        onTap: () {
+          //页面详情跳转
+          Navigator.push(
+              context,
+              new CupertinoPageRoute(
+                  builder: (context) => ItemInfoDetail(
+                        url: articleModel.articleDataData.link,
+                        title: articleModel.articleDataData.title,
+                      )));
+        },
+        child: new Container(
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      width: 0.5,
+                      style: BorderStyle.solid,
+                      color: Colors.grey[200])),
+            ),
+            child: new Column(
+              children: <Widget>[
+                new Expanded(
+                  flex: 1,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 15,
+                        top: 8,
+                        child: Text(
+                          articleModel.articleDataData.shareUser,
+                          style:
+                              TextStyle(fontSize: 12.0, color: Colors.black45),
                         ),
-                        Positioned(
-                          right: 15,
-                          top: 8,
-                          child: Text(
-                            articleModel.articleDataData.niceDate,
-                            style: TextStyle(
-                                fontSize: 11.0, color: Colors.black45),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      Positioned(
+                        right: 15,
+                        top: 8,
+                        child: Text(
+                          articleModel.articleDataData.niceDate,
+                          style:
+                              TextStyle(fontSize: 11.0, color: Colors.black45),
+                        ),
+                      )
+                    ],
                   ),
-                  new Expanded(
-                    child: new Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          child: Image.network(
-                            articleModel.articleDataData.envelopePic,
-                            fit: BoxFit.cover,
-                            width: 60,
-                            height: 50,
-                          ),
-                        ),
-                        Positioned(
-                          right: 15,
-                          left: 85,
-                          child: new Column(
-                            children: <Widget>[
-                              Text(
+                ),
+                new Expanded(
+                  child: itemType
+                      ? Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: 15,
+                              child: Image.network(
+                                articleModel.articleDataData.envelopePic,
+                                fit: BoxFit.cover,
+                                width: 60,
+                                height: 50,
+                              ),
+                            ),
+                            Positioned(
+                              right: 15,
+                              left: 85,
+                              child: new Column(
+                                children: <Widget>[
+                                  Text(
+                                    articleModel.articleDataData.title
+                                        .replaceAll("<em", "")
+                                        .replaceAll("class=", "")
+                                        .replaceAll("highlight", "")
+                                        .replaceAll("'", "")
+                                        .replaceAll(">", "")
+                                        .replaceAll("</em", "")
+                                        .replaceAll("&", "")
+                                        .trim(),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: Content.TEXT_CONTENT_SIZE,
+                                        color: Colors.black),
+                                  ),
+                                  new Padding(
+                                      padding: EdgeInsets.only(top: 10)),
+                                  Text(
+                                    articleModel.articleDataData.desc,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize:
+                                            Content.TEXT_CONTENT_SECOND_SIZE,
+                                        color: Colors.black45),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: 15,
+                              right: 15,
+                              top: 5,
+                              child: Text(
                                 articleModel.articleDataData.title
                                     .replaceAll("<em", "")
                                     .replaceAll("class=", "")
@@ -265,182 +317,93 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     .replaceAll("&", "")
                                     .trim(),
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 2,
                                 style: TextStyle(
                                     fontSize: Content.TEXT_CONTENT_SIZE,
                                     color: Colors.black),
                               ),
-                              new Padding(padding: EdgeInsets.only(top: 10)),
-                              Text(
-                                articleModel.articleDataData.desc,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: Content.TEXT_CONTENT_SECOND_SIZE,
-                                    color: Colors.black45),
+                            ),
+                          ],
+                        ),
+                  flex: 2,
+                ),
+                new Expanded(
+                  child: new Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 15,
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              child: Container(
+                                child: Text(
+                                  articleModel.articleDataData.superChapterName,
+                                  style: TextStyle(fontSize: 11.0),
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    flex: 2,
-                  ),
-                  new Expanded(
-                    child: new Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Container(
-                            child: Text(
-                              articleModel.articleDataData.superChapterName ,
-                              style: TextStyle(fontSize: 11.0),
+                              margin: EdgeInsets.only(left: 5),
+                              decoration: BoxDecoration(
+                                border: new Border.all(
+                                    color: Colors.red, width: 0.5),
+                                shape: BoxShape.rectangle,
+                                borderRadius: new BorderRadius.circular(3.0),
+                              ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: Container(
-                            child: Text(
+                            Container(
+                              margin: EdgeInsets.only(left: 5),
+                              child: Container(
+                                child: Text(
                                   articleModel.articleDataData.chapterName,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                            new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
+                                  style: TextStyle(fontSize: 11.0),
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                border: new Border.all(
+                                    color: Colors.red, width: 0.5),
+                                shape: BoxShape.rectangle,
+                                borderRadius: new BorderRadius.circular(3.0),
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                    flex: 1,
-                  ),
-                ],
-              )),
-        );
-      } else {
-        childWidget = GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                new CupertinoPageRoute(
-                    builder: (context) => ItemInfoDetail(
-                          url: articleModel.articleDataData.link,
-                          title: articleModel.articleDataData.title,
-                        )));
-          },
-          child: new Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 0.5,
-                        style: BorderStyle.solid,
-                        color: Colors.grey[200])),
-              ),
-              child: new Column(
-                children: <Widget>[
-                  new Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          top: 8,
-                          child: Text(
-                            articleModel.articleDataData.shareUser,
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.black45),
-                          ),
-                        ),
-                        Positioned(
+                      ),
+                      Positioned(
                           right: 15,
-                          top: 8,
-                          child: Text(
-                            articleModel.articleDataData.niceDate,
-                            style: TextStyle(
-                                fontSize: 11.0, color: Colors.black45),
-                          ),
-                        )
-                      ],
-                    ),
+                          child: InkWell(
+                            child: likeModel
+                                    .contains(articleModel.articleDataData.id)
+                                ? Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                  )
+                                : Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.red,
+                                  ),
+                            onTap: () {
+
+                              debugPrint("是否收藏:"+likeModel.contains(articleModel.articleDataData.id));
+                              if (likeModel
+                                  .contains(articleModel.articleDataData.id)) {
+                                likeModel.removeLike(
+                                    articleModel.articleDataData.id);
+                                model.uncollect(
+                                    articleModel.articleDataData.id.toString());
+                              } else {
+                                likeModel
+                                    .addLike(articleModel.articleDataData.id);
+                                model.collect(
+                                    articleModel.articleDataData.id.toString());
+                              }
+                            },
+                          )),
+                    ],
                   ),
-                  new Expanded(
-                    child: new Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          right: 15,
-                          top: 5,
-                          child: Text(
-                            articleModel.articleDataData.title
-                                .replaceAll("<em", "")
-                                .replaceAll("class=", "")
-                                .replaceAll("highlight", "")
-                                .replaceAll("'", "")
-                                .replaceAll(">", "")
-                                .replaceAll("</em", "")
-                                .replaceAll("&", "")
-                                .trim(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: Content.TEXT_CONTENT_SIZE,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                    flex: 2,
-                  ),
-                  new Expanded(
-                    child: new Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Container(
-                            child: Text(
-                              articleModel.articleDataData.superChapterName ,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                            new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: Container(
-                            child: Text(
-                              articleModel.articleDataData.chapterName,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                         /* decoration: BoxDecoration(
-                            border:
-                            new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),*/
-                        ),
-                      ],
-                    ),
-                    flex: 1,
-                  ),
-                ],
-              )),
-        );
-      }
+                  flex: 1,
+                ),
+              ],
+            )),
+      );
     }
 
     return childWidget;

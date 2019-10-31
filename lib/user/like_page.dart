@@ -297,7 +297,6 @@ class Page extends State<LikePage> {
     print(url);
     response = await NetUtil().dio.get(url);
     Map aritcle_data = response.data;
-    debugPrint("返回的数据: " + response.data.toString());
     LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
     if(likeEntity.errorCode==-1001){
       var model=Provider.of<LoginModel>(context);
