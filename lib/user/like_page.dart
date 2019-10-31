@@ -9,6 +9,7 @@ import 'package:news/entity/like_entity.dart';
 import 'package:news/home/ItemDetail.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:news/utils/net_util.dart';
 import 'package:news/view/login_widget.dart';
 
 class LikePage extends StatefulWidget {
@@ -22,7 +23,7 @@ class LikePage extends StatefulWidget {
 class Page extends State<LikePage> {
   int count = 0;
 
-  LikeEntity _likeEntity;
+  List<LikeDataData> _likeDataData;
 
   bool isPerformingRequest = false;
 
@@ -86,7 +87,7 @@ class Page extends State<LikePage> {
                 slivers: <Widget>[
                   SliverFixedExtentList(
                     delegate: SliverChildBuilderDelegate(_buildListItem,
-                        childCount: _likeEntity.data.datas.length),
+                        childCount: _likeDataData.length),
                     itemExtent: 120.0,
                   ),
                 ],
@@ -103,11 +104,11 @@ class Page extends State<LikePage> {
   Widget _buildListItem(BuildContext context, int index) {
     Widget childWidget;
 
-    if (index == _likeEntity.data.datas.length - 1) {
+    if (index == _likeDataData.length - 1) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {
-      if (_likeEntity.data.datas[index].envelopePic != "") {
+      if (_likeDataData[index].envelopePic != "") {
         childWidget = GestureDetector(
           onTap: () {
             //页面详情跳转
@@ -115,8 +116,8 @@ class Page extends State<LikePage> {
                 context,
                 new CupertinoPageRoute(
                     builder: (context) => ItemInfoDetail(
-                          url: _likeEntity.data.datas[index].link,
-                          title: _likeEntity.data.datas[index].title,
+                          url:_likeDataData[index].link,
+                          title: _likeDataData[index].title,
                         )));
           },
           child: new Container(
@@ -137,7 +138,7 @@ class Page extends State<LikePage> {
                           left: 15,
                           top: 8,
                           child: Text(
-                            _likeEntity.data.datas[index].author,
+                            _likeDataData[index].author,
                             style: TextStyle(
                                 fontSize: 12.0, color: Colors.black45),
                           ),
@@ -146,7 +147,7 @@ class Page extends State<LikePage> {
                           right: 15,
                           top: 8,
                           child: Text(
-                            _likeEntity.data.datas[index].niceDate,
+                            _likeDataData[index].niceDate,
                             style: TextStyle(
                                 fontSize: 11.0, color: Colors.black45),
                           ),
@@ -160,7 +161,7 @@ class Page extends State<LikePage> {
                         Positioned(
                           left: 15,
                           child: Image.network(
-                            _likeEntity.data.datas[index].envelopePic,
+                            _likeDataData[index].envelopePic,
                             fit: BoxFit.cover,
                             width: 60,
                             height: 50,
@@ -172,7 +173,7 @@ class Page extends State<LikePage> {
                           child: new Column(
                             children: <Widget>[
                               Text(
-                                _likeEntity.data.datas[index].title,
+                                _likeDataData[index].title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -181,7 +182,7 @@ class Page extends State<LikePage> {
                               ),
                               new Padding(padding: EdgeInsets.only(top: 10)),
                               Text(
-                                _likeEntity.data.datas[index].desc,
+                                _likeDataData[index].desc,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -202,7 +203,7 @@ class Page extends State<LikePage> {
                           margin: EdgeInsets.only(left: 15),
                           child: Container(
                             child: Text(
-                              _likeEntity.data.datas[index].chapterName,
+                              _likeDataData[index].chapterName,
                               style: TextStyle(fontSize: 11.0),
                             ),
                           ),
@@ -217,7 +218,7 @@ class Page extends State<LikePage> {
                           margin: EdgeInsets.only(left: 5),
                           child: Container(
                             child: Text(
-                              _likeEntity.data.datas[index].chapterName,
+                              _likeDataData[index].chapterName,
                               style: TextStyle(fontSize: 11.0),
                             ),
                           ),
@@ -242,8 +243,8 @@ class Page extends State<LikePage> {
                 context,
                 new CupertinoPageRoute(
                     builder: (context) => ItemInfoDetail(
-                          url: _likeEntity.data.datas[index].link,
-                          title: _likeEntity.data.datas[index].title,
+                          url: _likeDataData[index].link,
+                          title: _likeDataData[index].title,
                         )));
           },
           child: new Container(
@@ -264,7 +265,7 @@ class Page extends State<LikePage> {
                           left: 15,
                           top: 8,
                           child: Text(
-                            _likeEntity.data.datas[index].author,
+                            _likeDataData[index].author,
                             style: TextStyle(
                                 fontSize: 12.0, color: Colors.black45),
                           ),
@@ -273,7 +274,7 @@ class Page extends State<LikePage> {
                           right: 15,
                           top: 8,
                           child: Text(
-                            _likeEntity.data.datas[index].niceDate,
+                            _likeDataData[index].niceDate,
                             style: TextStyle(
                                 fontSize: 11.0, color: Colors.black45),
                           ),
@@ -289,7 +290,7 @@ class Page extends State<LikePage> {
                           right: 15,
                           top: 5,
                           child: Text(
-                            _likeEntity.data.datas[index].title,
+                            _likeDataData[index].title,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(
@@ -308,7 +309,7 @@ class Page extends State<LikePage> {
                           margin: EdgeInsets.only(left: 15),
                           child: Container(
                             child: Text(
-                              _likeEntity.data.datas[index].chapterName,
+                              _likeDataData[index].chapterName,
                               style: TextStyle(fontSize: 11.0),
                             ),
                           ),
@@ -323,7 +324,7 @@ class Page extends State<LikePage> {
                           margin: EdgeInsets.only(left: 5),
                           child: Container(
                             child: Text(
-                              _likeEntity.data.datas[index].chapterName,
+                              _likeDataData[index].chapterName,
                               style: TextStyle(fontSize: 11.0),
                             ),
                           ),
@@ -375,19 +376,23 @@ class Page extends State<LikePage> {
   Future getArticleData(int count) async {
 
     Response response;
-    Dio dio = Dio();
-    var cookieJar=CookieJar();
-    dio.interceptors.add(CookieManager(cookieJar));
 
     String url = Api.LIKE_URL + count.toString() + "/json";
     print(url);
-    response = await dio.get(url);
+    response=await NetUtil().dio.get(url);
     Map aritcle_data = response.data;
     debugPrint("返回的数据: " + response.data.toString());
     LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
+
+    List<LikeDataData> _data=likeEntity.data.datas;
+
+
+
+
     setState(() {
-      _likeEntity = likeEntity;
-      if( _likeEntity.data!=null){
+      _likeDataData=_data;
+
+      if( _likeDataData!=null){
         isShow=true;
       }else{
         isShow=false;
@@ -402,18 +407,24 @@ class Page extends State<LikePage> {
       });
 
       Response response;
-      Dio dio = Dio();
-      var cookieJar=CookieJar();
-      dio.interceptors.add(CookieManager(cookieJar));
-      String url = Api.LIKE_URL + count.toString() + "/json";
-      response = await dio.get(url);
 
+      String url = Api.LIKE_URL + count.toString() + "/json";
+      response = await NetUtil().dio.get(url);
       Map aritcle_data = response.data;
       LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
+
+      List<LikeDataData> _data=likeEntity.data.datas;
+
       setState(() {
-        _likeEntity = likeEntity;
+        _likeDataData.addAll(_data);
         isPerformingRequest = false;
       });
     }
   }
+}
+
+class LikeModel{
+
+
+
 }
