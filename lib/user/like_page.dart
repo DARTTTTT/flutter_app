@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/entity/Api.dart';
 import 'package:news/entity/Content.dart';
-import 'package:news/entity/article_entity.dart';
 import 'package:news/entity/like_entity.dart';
 import 'package:news/home/ItemDetail.dart';
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:news/main.dart';
+import 'package:news/model/login_model.dart';
 import 'package:news/utils/net_util.dart';
 import 'package:news/view/login_widget.dart';
+
+import 'login_page.dart';
 
 class LikePage extends StatefulWidget {
   @override
@@ -27,7 +28,13 @@ class Page extends State<LikePage> {
 
   bool isPerformingRequest = false;
 
-  bool isShow=false;
+  bool isShow = false;
+
+  bool itemType = true;
+
+  bool isChartNameSHow=false;
+
+
 
   ScrollController scrollController = new ScrollController();
 
@@ -59,8 +66,7 @@ class Page extends State<LikePage> {
 
   @override
   Widget build(BuildContext context) {
-
-  print(isShow);
+    print(isShow);
 
     // TODO: implement build
     return Scaffold(
@@ -76,24 +82,26 @@ class Page extends State<LikePage> {
         preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
       ),
       body: new Stack(
-        children:<Widget>[
+        children: <Widget>[
           MediaQuery.removePadding(
             removeTop: true,
             context: context,
-            child: !isShow?DialogProgressIndicator("正在加载"):RefreshIndicator(
-              onRefresh: _refresh,
-              color: Colors.red,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverFixedExtentList(
-                    delegate: SliverChildBuilderDelegate(_buildListItem,
-                        childCount: _likeDataData.length),
-                    itemExtent: 120.0,
+            child: !isShow
+                ? DialogProgressIndicator("正在加载")
+                : RefreshIndicator(
+                    onRefresh: _refresh,
+                    color: Colors.red,
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        SliverFixedExtentList(
+                          delegate: SliverChildBuilderDelegate(_buildListItem,
+                              childCount: _likeDataData.length),
+                          itemExtent: 120.0,
+                        ),
+                      ],
+                      controller: scrollController,
+                    ),
                   ),
-                ],
-                controller: scrollController,
-              ),
-            ),
             // )
           ),
         ],
@@ -103,246 +111,155 @@ class Page extends State<LikePage> {
 
   Widget _buildListItem(BuildContext context, int index) {
     Widget childWidget;
+    if (_likeDataData[index].envelopePic != "") {
+      itemType = true;
+    } else {
+      itemType = false;
+    }
+
+    if(_likeDataData[index].chapterName!=""){
+      isChartNameSHow=true;
+    }else{
+      isChartNameSHow=false;
+    }
+
 
     if (index == _likeDataData.length - 1) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {
-      if (_likeDataData[index].envelopePic != "") {
-        childWidget = GestureDetector(
-          onTap: () {
-            //页面详情跳转
-            Navigator.push(
-                context,
-                new CupertinoPageRoute(
-                    builder: (context) => ItemInfoDetail(
-                          url:_likeDataData[index].link,
-                          title: _likeDataData[index].title,
-                        )));
-          },
-          child: new Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 0.5,
-                        style: BorderStyle.solid,
-                        color: Colors.grey[200])),
-              ),
-              child: new Column(
-                children: <Widget>[
-                  new Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          top: 8,
-                          child: Text(
-                            _likeDataData[index].author,
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.black45),
-                          ),
+      childWidget = GestureDetector(
+        onTap: () {
+          //页面详情跳转
+          Navigator.push(
+              context,
+              new CupertinoPageRoute(
+                  builder: (context) => ItemInfoDetail(
+                        url: _likeDataData[index].link,
+                        title: _likeDataData[index].title,
+                      )));
+        },
+        child: new Container(
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      width: 0.5,
+                      style: BorderStyle.solid,
+                      color: Colors.grey[200])),
+            ),
+            child: new Column(
+              children: <Widget>[
+                new Expanded(
+                  flex: 1,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 15,
+                        top: 8,
+                        child: Text(
+                          _likeDataData[index].author,
+                          style:
+                              TextStyle(fontSize: 12.0, color: Colors.black45),
                         ),
-                        Positioned(
-                          right: 15,
-                          top: 8,
-                          child: Text(
-                            _likeDataData[index].niceDate,
-                            style: TextStyle(
-                                fontSize: 11.0, color: Colors.black45),
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      Positioned(
+                        right: 15,
+                        top: 8,
+                        child: Text(
+                          _likeDataData[index].niceDate,
+                          style:
+                              TextStyle(fontSize: 11.0, color: Colors.black45),
+                        ),
+                      )
+                    ],
                   ),
-                  new Expanded(
-                    child: new Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          child: Image.network(
-                            _likeDataData[index].envelopePic,
-                            fit: BoxFit.cover,
-                            width: 60,
-                            height: 50,
-                          ),
-                        ),
-                        Positioned(
-                          right: 15,
-                          left: 85,
-                          child: new Column(
-                            children: <Widget>[
-                              Text(
+                ),
+                new Expanded(
+                  child: itemType
+                      ? new Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: 15,
+                              child: Image.network(
+                                _likeDataData[index].envelopePic,
+                                fit: BoxFit.cover,
+                                width: 60,
+                                height: 50,
+                              ),
+                            ),
+                            Positioned(
+                              right: 15,
+                              left: 85,
+                              child: new Column(
+                                children: <Widget>[
+                                  Text(
+                                    _likeDataData[index].title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: Content.TEXT_CONTENT_SIZE,
+                                        color: Colors.black),
+                                  ),
+                                  new Padding(
+                                      padding: EdgeInsets.only(top: 10)),
+                                  Text(
+                                    _likeDataData[index].desc,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize:
+                                            Content.TEXT_CONTENT_SECOND_SIZE,
+                                        color: Colors.black45),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : new Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: 15,
+                              right: 15,
+                              top: 5,
+                              child: Text(
                                 _likeDataData[index].title,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 2,
                                 style: TextStyle(
                                     fontSize: Content.TEXT_CONTENT_SIZE,
                                     color: Colors.black),
                               ),
-                              new Padding(padding: EdgeInsets.only(top: 10)),
-                              Text(
-                                _likeDataData[index].desc,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: Content.TEXT_CONTENT_SECOND_SIZE,
-                                    color: Colors.black45),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    flex: 2,
-                  ),
-                  new Expanded(
-                    child: new Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Container(
-                            child: Text(
-                              _likeDataData[index].chapterName,
-                              style: TextStyle(fontSize: 11.0),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
+                          ],
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: Container(
-                            child: Text(
-                              _likeDataData[index].chapterName,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                    flex: 1,
-                  ),
-                ],
-              )),
-        );
-      } else {
-        childWidget = GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                new CupertinoPageRoute(
-                    builder: (context) => ItemInfoDetail(
-                          url: _likeDataData[index].link,
-                          title: _likeDataData[index].title,
-                        )));
-          },
-          child: new Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 0.5,
-                        style: BorderStyle.solid,
-                        color: Colors.grey[200])),
-              ),
-              child: new Column(
-                children: <Widget>[
-                  new Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          top: 8,
+                  flex: 2,
+                ),
+                new Expanded(
+                  child: isChartNameSHow?new Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(left: 15),
+                        child: Container(
                           child: Text(
-                            _likeDataData[index].author,
-                            style: TextStyle(
-                                fontSize: 12.0, color: Colors.black45),
+                            _likeDataData[index].chapterName,
+                            style: TextStyle(fontSize: 11.0),
                           ),
                         ),
-                        Positioned(
-                          right: 15,
-                          top: 8,
-                          child: Text(
-                            _likeDataData[index].niceDate,
-                            style: TextStyle(
-                                fontSize: 11.0, color: Colors.black45),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  new Expanded(
-                    child: new Stack(
-                      children: <Widget>[
-                        Positioned(
-                          left: 15,
-                          right: 15,
-                          top: 5,
-                          child: Text(
-                            _likeDataData[index].title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: Content.TEXT_CONTENT_SIZE,
-                                color: Colors.black),
-                          ),
+                        decoration: BoxDecoration(
+                          border: new Border.all(color: Colors.red, width: 0.5),
+                          shape: BoxShape.rectangle,
+                          borderRadius: new BorderRadius.circular(3.0),
                         ),
-                      ],
-                    ),
-                    flex: 2,
-                  ),
-                  new Expanded(
-                    child: new Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Container(
-                            child: Text(
-                              _likeDataData[index].chapterName,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 5),
-                          child: Container(
-                            child: Text(
-                              _likeDataData[index].chapterName,
-                              style: TextStyle(fontSize: 11.0),
-                            ),
-                          ),
-                          /* decoration: BoxDecoration(
-                            border:
-                            new Border.all(color: Colors.red, width: 0.5),
-                            shape: BoxShape.rectangle,
-                            borderRadius: new BorderRadius.circular(3.0),
-                          ),*/
-                        ),
-                      ],
-                    ),
-                    flex: 1,
-                  ),
-                ],
-              )),
-        );
-      }
+                      ),
+
+                    ],
+                  ):Row(),
+                  flex: 1,
+                ),
+              ],
+            )),
+      );
     }
 
     return childWidget;
@@ -374,28 +291,32 @@ class Page extends State<LikePage> {
   }
 
   Future getArticleData(int count) async {
-
     Response response;
 
     String url = Api.LIKE_URL + count.toString() + "/json";
     print(url);
-    response=await NetUtil().dio.get(url);
+    response = await NetUtil().dio.get(url);
     Map aritcle_data = response.data;
     debugPrint("返回的数据: " + response.data.toString());
     LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
-
-    List<LikeDataData> _data=likeEntity.data.datas;
-
-
-
+    if(likeEntity.errorCode==-1001){
+      var model=Provider.of<LoginModel>(context);
+      model.clearUser();
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => LoginPage()));
+      return;
+    }
+    List<LikeDataData> _data = likeEntity.data.datas;
 
     setState(() {
-      _likeDataData=_data;
+      _likeDataData = _data;
 
-      if( _likeDataData!=null){
-        isShow=true;
-      }else{
-        isShow=false;
+      if (_likeDataData != null) {
+        isShow = true;
+      } else {
+        isShow = false;
       }
     });
   }
@@ -410,10 +331,9 @@ class Page extends State<LikePage> {
 
       String url = Api.LIKE_URL + count.toString() + "/json";
       response = await NetUtil().dio.get(url);
-      Map aritcle_data = response.data;
-      LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
+      LikeEntity likeEntity = LikeEntity.fromJson(response.data);
 
-      List<LikeDataData> _data=likeEntity.data.datas;
+      List<LikeDataData> _data = likeEntity.data.datas;
 
       setState(() {
         _likeDataData.addAll(_data);
@@ -423,8 +343,4 @@ class Page extends State<LikePage> {
   }
 }
 
-class LikeModel{
 
-
-
-}

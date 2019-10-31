@@ -118,7 +118,7 @@ class Page extends State<MyPage> {
                 } else {
                   Navigator.push(
                       context,
-                      new CupertinoPageRoute(
+                      new MaterialPageRoute(
                           builder: (context) => LoginPage()));
                 }
                 // Navigator.of(context).pushNamed(RouteName.favouriteList);
