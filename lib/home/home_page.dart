@@ -11,6 +11,7 @@ import 'package:news/entity/banner_entity.dart';
 import 'package:news/main.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/like_model.dart';
+import 'package:news/utils/net_util.dart';
 
 import 'ItemDetail.dart';
 
@@ -199,7 +200,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     } else {
       itemType = false;
     }
-
     if (index == _items_article.length - 1) {
       //下拉加载的视图
       return _buildProgressIndicator();
@@ -370,8 +370,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                       Positioned(
                           right: 15,
                           child: InkWell(
-                            child: likeModel
-                                    .contains(articleModel.articleDataData.id)
+                            child: articleModel.articleDataData.collect
                                 ? Icon(
                                     Icons.favorite,
                                     color: Colors.red,
@@ -381,19 +380,30 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     color: Colors.red,
                                   ),
                             onTap: () {
+                              print(articleModel.articleDataData.collect);
+                              if (articleModel.articleDataData.collect) {
+                                print("是收藏:" +
+                                    likeModel
+                                        .contains(
+                                            articleModel.articleDataData.id)
+                                        .toString());
 
-                              debugPrint("是否收藏:"+likeModel.contains(articleModel.articleDataData.id));
-                              if (likeModel
-                                  .contains(articleModel.articleDataData.id)) {
                                 likeModel.removeLike(
                                     articleModel.articleDataData.id);
                                 model.uncollect(
                                     articleModel.articleDataData.id.toString());
                               } else {
+                                print("否收藏:" +
+                                    likeModel
+                                        .contains(
+                                            articleModel.articleDataData.id)
+                                        .toString());
+
                                 likeModel
                                     .addLike(articleModel.articleDataData.id);
                                 model.collect(
                                     articleModel.articleDataData.id.toString());
+
                               }
                             },
                           )),
@@ -520,10 +530,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   Future getArticleData(int count) async {
     Response response;
-    Dio dio = Dio();
     String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
-
-    response = await dio.get(url);
+    response = await NetUtil().dio.get(url);
     Map aritcle_data = response.data;
     ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
     var article_items = [];
@@ -544,10 +552,9 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       });
 
       Response response;
-      Dio dio = Dio();
       String url = Api.ARTICLE_LIST_URL + count.toString() + "/json";
 
-      response = await dio.get(url);
+      response = await NetUtil().dio.get(url);
       Map aritcle_data = response.data;
       ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
       var article_items = [];

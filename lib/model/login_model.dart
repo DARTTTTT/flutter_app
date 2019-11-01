@@ -27,7 +27,7 @@ class LoginModel extends ViewStateModel {
     return AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
   }
 
-  LoginModel({@required this.likeModel}) {
+  LoginModel() {
     var userMap = AppManger.sharedPreferences.getString(Content.KEY_USER);
     if (userMap != null) {
       Map<String, dynamic> map = json.decode(userMap);
@@ -52,6 +52,7 @@ class LoginModel extends ViewStateModel {
     _userEntity = UserEntity.fromJson(map);
     AppManger.sharedPreferences.setString(Content.KEY_USER, jsonData);
     print("登录:" + _userEntity.data.collectIds.toString());
+    likeModel=new LikeModel();
     likeModel.replaceAll(_userEntity.data.collectIds);
     notifyListeners();
 

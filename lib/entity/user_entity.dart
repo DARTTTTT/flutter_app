@@ -29,7 +29,7 @@ class UserData {
 	String icon;
 	String nickname;
 	bool admin;
-	List<int> collectIds;
+	List<Object> collectIds;
 	int id;
 	int type;
 	String email;

@@ -16,11 +16,13 @@ class LikeModel extends ChangeNotifier{
   }
 
   replaceAll(List ids){
-    map.clear();
-    //ids.forEach((id) => map[id] = true);
-    ids.forEach((id){
-      map[id]=true;
-    });
+    print(ids);
+      map.clear();
+      //ids.forEach((id) => map[id] = true);
+      ids.forEach((id){
+        map[id]=true;
+      });
+
     notifyListeners();
   }
 
@@ -30,6 +32,7 @@ class LikeModel extends ChangeNotifier{
   }
 
   removeLike(int id){
+    print("移除的是:"+id.toString());
     map[id]=false;
     notifyListeners();
   }

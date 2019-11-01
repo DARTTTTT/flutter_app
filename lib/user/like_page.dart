@@ -124,7 +124,7 @@ class Page extends State<LikePage> {
     }
 
 
-    if (index == _likeDataData.length - 1) {
+    if (index == _likeDataData.length ) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {

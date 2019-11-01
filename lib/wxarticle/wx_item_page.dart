@@ -110,7 +110,7 @@ class Page extends State<WxItemPage> with AutomaticKeepAliveClientMixin {
   Widget _buildListItem(BuildContext context, int index) {
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
-    if (index == _items_article.length - 1) {
+    if (index == _items_article.length-1 ) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {
