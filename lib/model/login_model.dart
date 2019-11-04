@@ -43,7 +43,7 @@ class LoginModel extends ViewStateModel {
     _userEntity = null;
     notifyListeners();
     AppManger.sharedPreferences.remove(Content.KEY_USER);
-    AppManger.sharedPreferences.remove(Content.KEY_USER_NAME);
+    AppManger.sharedPreferences.remove(Content.KEY_COLLECT_IDS);
   }
 
   //保存登录数据
@@ -51,7 +51,8 @@ class LoginModel extends ViewStateModel {
     Map<String, dynamic> map = json.decode(jsonData);
     _userEntity = UserEntity.fromJson(map);
     AppManger.sharedPreferences.setString(Content.KEY_USER, jsonData);
-    print("登录:" + _userEntity.data.collectIds.toString());
+    AppManger.sharedPreferences.setString(Content.KEY_USER_NAME, _userEntity.data.nickname);
+    AppManger.sharedPreferences.setStringList(Content.KEY_COLLECT_IDS, _userEntity.data.collectIds);
     likeModel=new LikeModel();
     likeModel.replaceAll(_userEntity.data.collectIds);
     notifyListeners();

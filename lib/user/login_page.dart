@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news/config/manger.dart';
+import 'package:news/entity/Content.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/register_page.dart';
 import 'package:news/view/head_bottom_view.dart';
@@ -19,6 +21,20 @@ class Page extends State<LoginPage> {
   TextEditingController textNickController = new TextEditingController();
   TextEditingController textPassController = new TextEditingController();
   ValueNotifier<bool> obscureNotifier = ValueNotifier<bool>(false);
+  String username;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+    setState(() {
+      username=AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
+      textNickController.text = (username == null ? "" : username);
+    });
+
+  }
 
   @override
   void dispose() {

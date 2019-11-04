@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:news/config/manger.dart';
 import 'package:news/entity/article_entity.dart';
 
 class LikeModel extends ChangeNotifier{
