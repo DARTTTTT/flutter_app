@@ -24,28 +24,43 @@ class InfoDetail extends State<ItemInfoDetail> {
 
   @override
   Widget build(BuildContext context) {
-      // TODO: implement build
-     return WebviewScaffold(
-        appBar: PreferredSize(
-          child: AppBar(
-            backgroundColor: Colors.red,
-            title: Text(title,style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),),
-            leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
+    return Stack(
+      children: <Widget>[
+        WebviewScaffold(
+          appBar: PreferredSize(
+            child: AppBar(
+              backgroundColor: Colors.red,
+              title: Text(
+                title,
+                style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
+              ),
+              leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.favorite_border,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
+              ],
+            ),
+            preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
           ),
-          preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
+          url: url,
+          withJavascript: true,
+          withLocalStorage: true,
+          withZoom: false,
         ),
-        url: url,
-        withJavascript: true,
-        withLocalStorage: true,
-        withZoom: false,
-      );
-
+      ],
+    );
+    // TODO: implement build
   }
 }

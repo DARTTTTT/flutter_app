@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:news/config/manger.dart';
 import 'package:news/entity/Api.dart';
 import 'package:news/entity/Content.dart';
 import 'package:news/entity/article_entity.dart';
@@ -383,7 +382,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     color: Colors.red,
                                   ),
                             onTap: () {
-                              print(articleModel.articleDataData.collect);
 
                               if (articleModel.articleDataData.collect) {
                                 likeModel.removeLike(
