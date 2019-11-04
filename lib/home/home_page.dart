@@ -386,23 +386,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                               print(articleModel.articleDataData.collect);
 
                               if (articleModel.articleDataData.collect) {
-                                print("是收藏:" +
-                                    likeModel
-                                        .contains(
-                                            articleModel.articleDataData.id)
-                                        .toString());
-
                                 likeModel.removeLike(
                                     articleModel.articleDataData.id);
                                 model.uncollect(
                                     articleModel.articleDataData.id.toString());
                               } else {
-                                print("否收藏:" +
-                                    likeModel
-                                        .contains(
-                                            articleModel.articleDataData.id)
-                                        .toString());
-
                                 likeModel
                                     .addLike(articleModel.articleDataData.id);
                                 model.collect(
@@ -410,7 +398,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                               }
                               //关键代码
                               articleModel.articleDataData.collect = !(articleModel.articleDataData.collect ?? true);
-
                             },
                           )),
                     ],
