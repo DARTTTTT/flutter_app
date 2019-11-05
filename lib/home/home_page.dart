@@ -1,4 +1,4 @@
-import 'dart:core' ;
+import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -213,8 +213,12 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               context,
               new CupertinoPageRoute(
                   builder: (context) => ItemInfoDetail(
+                        isLike: false,
                         url: articleModel.articleDataData.link,
                         title: articleModel.articleDataData.title,
+                        collect: articleModel.articleDataData.collect,
+                        id: articleModel.articleDataData.id,
+                        originId: null,
                       )));
         },
         child: new Container(
@@ -382,7 +386,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     color: Colors.red,
                                   ),
                             onTap: () {
-
                               if (articleModel.articleDataData.collect) {
                                 likeModel.removeLike(
                                     articleModel.articleDataData.id);
@@ -395,7 +398,9 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     articleModel.articleDataData.id.toString());
                               }
                               //关键代码
-                              articleModel.articleDataData.collect = !(articleModel.articleDataData.collect ?? true);
+                              articleModel.articleDataData.collect =
+                                  !(articleModel.articleDataData.collect ??
+                                      true);
                             },
                           )),
                     ],
@@ -450,8 +455,12 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   context,
                   CupertinoPageRoute(
                       builder: (context) => ItemInfoDetail(
+                            isLike: false,
                             url: im.bannerData.url,
                             title: im.bannerData.title,
+                            collect: false,
+                            id: im.bannerData.id,
+                            originId: null,
                           )));
             },
             child: Image.network(

@@ -114,10 +114,16 @@ class GuideItemWidget extends StatelessWidget {
                                 context,
                                 new CupertinoPageRoute(
                                     builder: (context) => ItemInfoDetail(
+                                          isLike: false,
                                           url: treeModel
                                               .guideData.articles[index].link,
                                           title: treeModel
                                               .guideData.articles[index].title,
+                                          collect: treeModel.guideData
+                                              .articles[index].collect,
+                                          id: treeModel
+                                              .guideData.articles[index].id,
+                                          originId: null
                                         )));
                           },
                           label: Text(

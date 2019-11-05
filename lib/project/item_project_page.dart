@@ -142,8 +142,12 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
               context,
               new CupertinoPageRoute(
                   builder: (context) => ItemInfoDetail(
+                    isLike: false,
                     url: articleModel.articleDataData.link,
                     title: articleModel.articleDataData.title,
+                    collect: articleModel.articleDataData.collect,
+                    id: articleModel.articleDataData.id,
+                    originId: null,
                   )));
         },
         child: new Container(

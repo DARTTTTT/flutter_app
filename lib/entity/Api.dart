@@ -40,7 +40,10 @@ class Api {
   //收藏列表
   static const String LIKE_URL=BaseUrl+"lg/collect/list/";
   //收藏文章
-  static const String COLLECT_URL=BaseUrl+"/lg/collect/";
+  static const String COLLECT_URL=BaseUrl+"lg/collect/";
   //取消收藏文章
-  static const String UN_COLLECT_URL=BaseUrl+"/lg/uncollect_originId/";
+  static const String UN_COLLECT_URL=BaseUrl+"lg/uncollect_originId/";
+  //我的收藏取消
+  static const String UN_COLLECT_LIKE_URL=BaseUrl+"lg/uncollect/";
+
 }

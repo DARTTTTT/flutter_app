@@ -165,4 +165,19 @@ class LoginModel extends ViewStateModel {
       return false;
     }
   }
+
+  Future<bool> uncollectLike(String id,String originId ) async {
+    if (!hasUserEntity) {
+      return false;
+    }
+    setBusy(true);
+    try {
+      var response = await AppRepository.uncollectLike(id,originId);
+      setBusy(false);
+      return true;
+    } catch (e) {
+      setError(e is Error ? e.toString() : e.message);
+      return false;
+    }
+  }
 }

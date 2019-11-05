@@ -32,9 +32,7 @@ class Page extends State<LikePage> {
 
   bool itemType = true;
 
-  bool isChartNameSHow=false;
-
-
+  bool isChartNameSHow = false;
 
   ScrollController scrollController = new ScrollController();
 
@@ -117,14 +115,13 @@ class Page extends State<LikePage> {
       itemType = false;
     }
 
-    if(_likeDataData[index].chapterName!=""){
-      isChartNameSHow=true;
-    }else{
-      isChartNameSHow=false;
+    if (_likeDataData[index].chapterName != "") {
+      isChartNameSHow = true;
+    } else {
+      isChartNameSHow = false;
     }
 
-
-    if (index == _likeDataData.length ) {
+    if (index == _likeDataData.length) {
       //下拉加载的视图
       return _buildProgressIndicator();
     } else {
@@ -135,8 +132,12 @@ class Page extends State<LikePage> {
               context,
               new CupertinoPageRoute(
                   builder: (context) => ItemInfoDetail(
+                        isLike: true,
                         url: _likeDataData[index].link,
                         title: _likeDataData[index].title,
+                        collect: true,
+                        id: _likeDataData[index].id,
+                        originId: _likeDataData[index].originId,
                       )));
         },
         child: new Container(
@@ -236,25 +237,27 @@ class Page extends State<LikePage> {
                   flex: 2,
                 ),
                 new Expanded(
-                  child: isChartNameSHow?new Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 15),
-                        child: Container(
-                          child: Text(
-                            _likeDataData[index].chapterName,
-                            style: TextStyle(fontSize: 11.0),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: new Border.all(color: Colors.red, width: 0.5),
-                          shape: BoxShape.rectangle,
-                          borderRadius: new BorderRadius.circular(3.0),
-                        ),
-                      ),
-
-                    ],
-                  ):Row(),
+                  child: isChartNameSHow
+                      ? new Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(left: 15),
+                              child: Container(
+                                child: Text(
+                                  _likeDataData[index].chapterName,
+                                  style: TextStyle(fontSize: 11.0),
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                border: new Border.all(
+                                    color: Colors.red, width: 0.5),
+                                shape: BoxShape.rectangle,
+                                borderRadius: new BorderRadius.circular(3.0),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(),
                   flex: 1,
                 ),
               ],
@@ -298,13 +301,11 @@ class Page extends State<LikePage> {
     response = await NetUtil().dio.get(url);
     Map aritcle_data = response.data;
     LikeEntity likeEntity = LikeEntity.fromJson(aritcle_data);
-    if(likeEntity.errorCode==-1001){
-      var model=Provider.of<LoginModel>(context);
+    if (likeEntity.errorCode == -1001) {
+      var model = Provider.of<LoginModel>(context);
       model.clearUser();
       Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => LoginPage()));
+          context, new MaterialPageRoute(builder: (context) => LoginPage()));
       return;
     }
     List<LikeDataData> _data = likeEntity.data.datas;
@@ -341,5 +342,3 @@ class Page extends State<LikePage> {
     }
   }
 }
-
-

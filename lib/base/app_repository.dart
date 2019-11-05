@@ -40,4 +40,11 @@ class AppRepository {
     var response=await NetUtil().dio.post(url);
     return response;
   }
+
+  static Future uncollectLike(String id,String originId) async{
+    String url=Api.UN_COLLECT_LIKE_URL+id+"/json";
+    var response=await NetUtil().dio.post(url,queryParameters: {'originId': originId ?? -1});
+    print(response);
+    return response;
+  }
 }

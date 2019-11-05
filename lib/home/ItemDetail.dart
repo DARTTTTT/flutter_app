@@ -2,28 +2,61 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:news/entity/Content.dart';
+import 'package:news/model/login_model.dart';
+import 'package:news/user/like_model.dart';
+
+import '../main.dart';
 
 class ItemInfoDetail extends StatefulWidget {
+  bool isLike;
   String url;
   String title;
+  bool collect;
+  int id;
+  int originId;
 
-  ItemInfoDetail({this.url, this.title});
+  ItemInfoDetail(
+      {this.isLike,
+      this.url,
+      this.title,
+      this.collect,
+      this.id,
+      this.originId});
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return InfoDetail(url: url, title: title);
+    return InfoDetail(
+        isLike: isLike,
+        url: url,
+        title: title,
+        collect: collect,
+        id: id,
+        originId: originId);
   }
 }
 
 class InfoDetail extends State<ItemInfoDetail> {
+  bool isLike;
   String url;
   String title;
+  bool collect;
+  int id;
+  int originId;
 
-  InfoDetail({this.url, this.title});
+  InfoDetail(
+      {this.isLike,
+      this.url,
+      this.title,
+      this.collect,
+      this.id,
+      this.originId});
 
   @override
   Widget build(BuildContext context) {
+    var likeModel = Provider.of<LikeModel>(context);
+    var model = Provider.of<LoginModel>(context);
+
     return Stack(
       children: <Widget>[
         WebviewScaffold(
@@ -34,21 +67,33 @@ class InfoDetail extends State<ItemInfoDetail> {
                 title,
                 style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
               ),
-              leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(
-                    Icons.favorite_border,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
+                  icon: collect
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: Colors.white,
+                        ),
+                  onPressed: () {
+                    if (collect) {
+                      likeModel.removeLike(id);
+                      print(isLike);
+                      if (isLike) {
+                        model.uncollectLike(id.toString(),originId.toString());
+                      } else {
+                        model.uncollect(id.toString());
+                      }
+                    } else {
+                      likeModel.addLike(id);
+                      model.collect(id.toString());
+                    }
+                    //关键代码
+                    collect = !(collect ?? true);
+                  },
                 ),
               ],
             ),
