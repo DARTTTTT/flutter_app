@@ -9,6 +9,7 @@ import 'package:news/entity/article_entity.dart';
 import 'package:news/entity/banner_entity.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/like_model.dart';
+import 'package:news/utils/net_util.dart';
 
 import '../main.dart';
 
@@ -396,11 +397,9 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
 
   Future getArticleData(int count) async {
     Response response;
-    Dio dio = Dio();
     String url = widget.url + count.toString() + "/json";
-    print(url);
-    print(widget.id);
-    response = await dio.get(url, queryParameters: {"cid": widget.id});
+
+    response = await NetUtil().dio.get(url, queryParameters: {"cid": widget.id});
     Map aritcle_data = response.data;
     ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);
     var article_items = [];
@@ -422,9 +421,8 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
       });
 
       Response response;
-      Dio dio = Dio();
       String url = widget.url + count.toString() + "/json";
-      response = await dio.get(url, queryParameters: {"cid": widget.id});
+      response = await NetUtil().dio.get(url, queryParameters: {"cid": widget.id});
 
       Map aritcle_data = response.data;
       ArticleEntity articleEntity = ArticleEntity.fromJson(aritcle_data);

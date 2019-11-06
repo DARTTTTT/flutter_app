@@ -11,6 +11,7 @@ import 'package:news/entity/article_entity.dart';
 import 'package:news/entity/banner_entity.dart';
 import 'package:news/home/search_page.dart';
 import 'package:news/main.dart';
+import 'package:news/model/home_model.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/like_model.dart';
 import 'package:news/utils/net_util.dart';
@@ -69,6 +70,12 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget layout(BuildContext context) {
+
+    var homeModel = Provider.of<HomeModel>(context);
+
+    homeModel.article(0);
+
+
     Widget childWidget;
     if (_items_article.length != 0) {
       childWidget = new Stack(
@@ -190,6 +197,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildListItem(BuildContext context, int index) {
+
+
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
 
@@ -512,8 +521,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   Future getData() async {
     Response response;
-    Dio dio = Dio();
-    response = await dio.get(Api.BANNER_URL);
+    response = await NetUtil().dio.get(Api.BANNER_URL);
     Map data = response.data;
     BannerEntity bannerEntity = BannerEntity.fromJson(data);
     var items = [];
