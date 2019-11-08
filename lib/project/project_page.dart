@@ -20,7 +20,6 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
 
   var _projectTreeList = [];
 
-  //List tabs = ["完整项目", "跨平台应用", "资源聚合类"];
 
   @override
   void initState() {
