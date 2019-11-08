@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +10,9 @@ import 'package:news/entity/article_entity.dart';
 import 'package:news/entity/banner_entity.dart';
 import 'package:news/home/search_page.dart';
 import 'package:news/main.dart';
-import 'package:news/model/home_model.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/like_model.dart';
 import 'package:news/utils/net_util.dart';
-
 import 'ItemDetail.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,19 +26,28 @@ class HomePage extends StatefulWidget {
 const maxOffset = 100;
 
 class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
   var _items_banner = [];
   var _items_article = [];
+
   ScrollController scrollController = new ScrollController();
   int count = 0;
   bool isPerformingRequest = false;
-
   double appBarAlpha = 0;
   double floatAlpha = 1;
   bool itemType = true;
+  List<ArticleDataData> articleDataList;
 
   @override
   void initState() {
     super.initState();
+
+
+
     getData();
     getArticleData(0);
     scrollController.addListener(() {
@@ -55,6 +61,10 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
       if (scrollController.position.pixels ==
           scrollController.position.minScrollExtent) {}
     });
+
+
+
+
   }
 
   @override
@@ -70,13 +80,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget layout(BuildContext context) {
-
-    var homeModel = Provider.of<HomeModel>(context);
-
-    homeModel.article(0);
-
-
     Widget childWidget;
+
     if (_items_article.length != 0) {
       childWidget = new Stack(
         children: <Widget>[
@@ -197,8 +202,6 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildListItem(BuildContext context, int index) {
-
-
     Widget childWidget;
     ArticleModel articleModel = this._items_article[index];
 
@@ -520,6 +523,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Future getData() async {
+
     Response response;
     response = await NetUtil().dio.get(Api.BANNER_URL);
     Map data = response.data;
@@ -534,6 +538,9 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     setState(() {
       _items_banner = items;
     });
+
+
+
   }
 
   Future getArticleData(int count) async {
@@ -551,6 +558,8 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     setState(() {
       _items_article = article_items;
     });
+
+
   }
 
   Future getMoreArticleData(int count) async {
@@ -577,9 +586,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
     }
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+
 }
 
 class ImagesModel {

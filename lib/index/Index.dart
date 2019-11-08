@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news/home/home_page.dart';
+import 'package:news/index/keep_state.dart';
 import 'package:news/my/my.dart';
 import 'package:news/project/project_page.dart';
 import 'package:news/system/system_page.dart';
@@ -33,11 +34,11 @@ class _IndexState extends State<Index> {
   ];
 
   final bodyList = [
-    HomePage(),
-    ProjectPage(),
-    WxArticlePage(),
-    SystemPage(),
-    MyPage()
+    KeepStateWidget(HomePage()),
+    KeepStateWidget(ProjectPage()),
+    KeepStateWidget(WxArticlePage()),
+    KeepStateWidget(SystemPage()),
+    KeepStateWidget(MyPage()),
   ];
 
   final pageController = PageController();

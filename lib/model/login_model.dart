@@ -141,7 +141,7 @@ class LoginModel extends ViewStateModel {
     }
     setBusy(true);
     try {
-      var response = await AppRepository.collect(id);
+       await AppRepository.collect(id);
 
       setBusy(false);
       return true;
@@ -157,7 +157,8 @@ class LoginModel extends ViewStateModel {
     }
     setBusy(true);
     try {
-      var response = await AppRepository.uncollect(id);
+     await AppRepository.uncollect(id);
+
       setBusy(false);
       return true;
     } catch (e) {
@@ -172,7 +173,7 @@ class LoginModel extends ViewStateModel {
     }
     setBusy(true);
     try {
-      var response = await AppRepository.uncollectLike(id,originId);
+      await AppRepository.uncollectLike(id,originId);
       setBusy(false);
       return true;
     } catch (e) {
