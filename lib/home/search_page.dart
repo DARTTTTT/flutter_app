@@ -28,12 +28,11 @@ class Page extends State<SearchPage> {
   var _items_article = [];
   bool itemType = true;
 
-
   ScrollController scrollController = new ScrollController();
   TextEditingController textEditingController = new TextEditingController();
   int count = 0;
   String search_content = null;
-
+  var color;
   @override
   void initState() {
     // TODO: implement initState
@@ -55,10 +54,11 @@ class Page extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    color= Theme.of(context).primaryColor;
     return Scaffold(
         appBar: PreferredSize(
           child: AppBar(
-            backgroundColor: Colors.red,
+            backgroundColor:color,
             title: TextField(
               autofocus: false,
               textInputAction: TextInputAction.search,
@@ -135,7 +135,7 @@ class Page extends State<SearchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
@@ -186,13 +186,13 @@ class Page extends State<SearchPage> {
               context,
               new CupertinoPageRoute(
                   builder: (context) => ItemInfoDetail(
-                    isLike: false,
-                    url: articleModel.articleDataData.link,
-                    title: articleModel.articleDataData.title,
-                    collect: articleModel.articleDataData.collect,
-                    id: articleModel.articleDataData.id,
-                    originId: null,
-                  )));
+                        isLike: false,
+                        url: articleModel.articleDataData.link,
+                        title: articleModel.articleDataData.title,
+                        collect: articleModel.articleDataData.collect,
+                        id: articleModel.articleDataData.id,
+                        originId: null,
+                      )));
         },
         child: new Container(
             decoration: BoxDecoration(
@@ -214,7 +214,7 @@ class Page extends State<SearchPage> {
                         child: Text(
                           articleModel.articleDataData.shareUser,
                           style:
-                          TextStyle(fontSize: 12.0, color: Colors.black45),
+                              TextStyle(fontSize: 12.0, color: Colors.black45),
                         ),
                       ),
                       Positioned(
@@ -223,7 +223,7 @@ class Page extends State<SearchPage> {
                         child: Text(
                           articleModel.articleDataData.niceDate,
                           style:
-                          TextStyle(fontSize: 11.0, color: Colors.black45),
+                              TextStyle(fontSize: 11.0, color: Colors.black45),
                         ),
                       )
                     ],
@@ -232,78 +232,78 @@ class Page extends State<SearchPage> {
                 new Expanded(
                   child: itemType
                       ? Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 15,
-                        child: Image.network(
-                          articleModel.articleDataData.envelopePic,
-                          fit: BoxFit.cover,
-                          width: 60,
-                          height: 50,
-                        ),
-                      ),
-                      Positioned(
-                        right: 15,
-                        left: 85,
-                        child: new Column(
                           children: <Widget>[
-                            Text(
-                              articleModel.articleDataData.title
-                                  .replaceAll("<em", "")
-                                  .replaceAll("class=", "")
-                                  .replaceAll("highlight", "")
-                                  .replaceAll("'", "")
-                                  .replaceAll(">", "")
-                                  .replaceAll("</em", "")
-                                  .replaceAll("&", "")
-                                  .trim(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize: Content.TEXT_CONTENT_SIZE,
-                                  color: Colors.black),
+                            Positioned(
+                              left: 15,
+                              child: Image.network(
+                                articleModel.articleDataData.envelopePic,
+                                fit: BoxFit.cover,
+                                width: 60,
+                                height: 50,
+                              ),
                             ),
-                            new Padding(
-                                padding: EdgeInsets.only(top: 10)),
-                            Text(
-                              articleModel.articleDataData.desc,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize:
-                                  Content.TEXT_CONTENT_SECOND_SIZE,
-                                  color: Colors.black45),
+                            Positioned(
+                              right: 15,
+                              left: 85,
+                              child: new Column(
+                                children: <Widget>[
+                                  Text(
+                                    articleModel.articleDataData.title
+                                        .replaceAll("<em", "")
+                                        .replaceAll("class=", "")
+                                        .replaceAll("highlight", "")
+                                        .replaceAll("'", "")
+                                        .replaceAll(">", "")
+                                        .replaceAll("</em", "")
+                                        .replaceAll("&", "")
+                                        .trim(),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: Content.TEXT_CONTENT_SIZE,
+                                        color: Colors.black),
+                                  ),
+                                  new Padding(
+                                      padding: EdgeInsets.only(top: 10)),
+                                  Text(
+                                    articleModel.articleDataData.desc,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize:
+                                            Content.TEXT_CONTENT_SECOND_SIZE,
+                                        color: Colors.black45),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : Stack(
+                          children: <Widget>[
+                            Positioned(
+                              left: 15,
+                              right: 15,
+                              top: 5,
+                              child: Text(
+                                articleModel.articleDataData.title
+                                    .replaceAll("<em", "")
+                                    .replaceAll("class=", "")
+                                    .replaceAll("highlight", "")
+                                    .replaceAll("'", "")
+                                    .replaceAll(">", "")
+                                    .replaceAll("</em", "")
+                                    .replaceAll("&", "")
+                                    .trim(),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: TextStyle(
+                                    fontSize: Content.TEXT_CONTENT_SIZE,
+                                    color: Colors.black),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  )
-                      : Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 15,
-                        right: 15,
-                        top: 5,
-                        child: Text(
-                          articleModel.articleDataData.title
-                              .replaceAll("<em", "")
-                              .replaceAll("class=", "")
-                              .replaceAll("highlight", "")
-                              .replaceAll("'", "")
-                              .replaceAll(">", "")
-                              .replaceAll("</em", "")
-                              .replaceAll("&", "")
-                              .trim(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: Content.TEXT_CONTENT_SIZE,
-                              color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
                   flex: 2,
                 ),
                 new Expanded(
@@ -323,7 +323,7 @@ class Page extends State<SearchPage> {
                               margin: EdgeInsets.only(left: 5),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -338,7 +338,7 @@ class Page extends State<SearchPage> {
                               ),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -351,13 +351,13 @@ class Page extends State<SearchPage> {
                           child: InkWell(
                             child: articleModel.articleDataData.collect
                                 ? Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                            )
+                                    Icons.favorite,
+                                    color: color,
+                                  )
                                 : Icon(
-                              Icons.favorite_border,
-                              color: Colors.red,
-                            ),
+                                    Icons.favorite_border,
+                                    color: color,
+                                  ),
                             onTap: () {
                               print(articleModel.articleDataData.collect);
 
@@ -373,7 +373,9 @@ class Page extends State<SearchPage> {
                                     articleModel.articleDataData.id.toString());
                               }
                               //关键代码
-                              articleModel.articleDataData.collect = !(articleModel.articleDataData.collect ?? true);
+                              articleModel.articleDataData.collect =
+                                  !(articleModel.articleDataData.collect ??
+                                      true);
                             },
                           )),
                     ],
@@ -398,7 +400,7 @@ class Page extends State<SearchPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SpinKitFadingCircle(
-                color: Colors.red,
+                color: color,
                 size: 30.0,
               ),
               new Padding(padding: EdgeInsets.only(right: 10)),
@@ -423,7 +425,7 @@ class Page extends State<SearchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),

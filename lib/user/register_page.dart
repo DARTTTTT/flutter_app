@@ -92,7 +92,7 @@ class Page extends State<RegisterPage> {
                       shape: BoxShape.rectangle,
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.red[50],
+                            color: color,
                             offset: Offset(1.0, 1.0),
                             blurRadius: 10.0,
                             spreadRadius: 3.0),

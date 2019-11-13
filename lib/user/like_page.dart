@@ -33,7 +33,7 @@ class Page extends State<LikePage> {
   bool itemType = true;
 
   bool isChartNameSHow = false;
-
+  var color;
   ScrollController scrollController = new ScrollController();
 
   Future<Null> _refresh() async {
@@ -64,13 +64,12 @@ class Page extends State<LikePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(isShow);
-
+  color = Theme.of(context).primaryColor;
     // TODO: implement build
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: color,
           title: Text(
             "我的收藏",
             style: TextStyle(
@@ -88,7 +87,7 @@ class Page extends State<LikePage> {
                 ? DialogProgressIndicator("正在加载")
                 : RefreshIndicator(
                     onRefresh: _refresh,
-                    color: Colors.red,
+                    color: color,
                     child: CustomScrollView(
                       slivers: <Widget>[
                         SliverFixedExtentList(
@@ -250,7 +249,7 @@ class Page extends State<LikePage> {
                               ),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -278,7 +277,7 @@ class Page extends State<LikePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SpinKitFadingCircle(
-                color: Colors.red,
+                color: color,
                 size: 30.0,
               ),
               new Padding(padding: EdgeInsets.only(right: 10)),
