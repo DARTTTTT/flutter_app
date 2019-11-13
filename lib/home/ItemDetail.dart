@@ -56,13 +56,14 @@ class InfoDetail extends State<ItemInfoDetail> {
   Widget build(BuildContext context) {
     var likeModel = Provider.of<LikeModel>(context);
     var model = Provider.of<LoginModel>(context);
+    var color=  Theme.of(context).primaryColor;
 
     return Stack(
       children: <Widget>[
         WebviewScaffold(
           appBar: PreferredSize(
             child: AppBar(
-              backgroundColor: Colors.red,
+              backgroundColor: color,
               title: Text(
                 title,
                 style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),

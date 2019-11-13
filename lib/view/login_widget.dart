@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/entity/Content.dart';
 
-
 /// LoginPage 按钮样式封装
 class LoginButtonWidget extends StatelessWidget {
   final Widget child;
@@ -13,7 +12,7 @@ class LoginButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = Colors.red;
+    var color = Theme.of(context).primaryColor;
     return Container(
         height: 40,
         width: double.infinity,
@@ -48,23 +47,22 @@ class ButtonProgressIndicator extends StatelessWidget {
   }
 }
 
-
 // ignore: camel_case_types
-class DialogProgressIndicator extends StatelessWidget{
-
+class DialogProgressIndicator extends StatelessWidget {
   final String text;
 
   DialogProgressIndicator(this.text);
 
   @override
   Widget build(BuildContext context) {
+    var color = Theme.of(context).primaryColor;
     // TODO: implement build
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SpinKitFadingCircle(
-            color: Colors.red,
+            color: color,
             size: 30.0,
           ),
           new Padding(padding: EdgeInsets.only(top: 10)),
@@ -76,29 +74,28 @@ class DialogProgressIndicator extends StatelessWidget{
       ),
     );
   }
-
 }
 
 // ignore: must_be_immutable
-class TitleBar extends StatelessWidget{
-
+class TitleBar extends StatelessWidget {
   String text;
 
   TitleBar(this.text);
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    var color = Theme.of(context).primaryColor;
     return PreferredSize(
       child: AppBar(
-        backgroundColor: Colors.red,
-        title: Text(text,style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE,color: Colors.white),),
+        backgroundColor: color,
+        title: Text(
+          text,
+          style:
+              TextStyle(fontSize: Content.TEXT_TITLE_SIZE, color: Colors.white),
+        ),
       ),
       preferredSize: Size.fromHeight(Content.BAR_HEIGHT),
     );
   }
-
-
-
 }

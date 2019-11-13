@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:news/entity/Api.dart';
 import 'package:news/entity/Content.dart';
 import 'package:news/entity/project_entity.dart';
-import 'package:news/project/item_project_page.dart';
 import 'package:news/wxarticle/wx_item_page.dart';
 
 class WxArticlePage extends StatefulWidget {
@@ -19,6 +18,7 @@ class WxArticlePage extends StatefulWidget {
 class Page extends State<WxArticlePage> with SingleTickerProviderStateMixin {
   var _projectTreeList = [];
 
+
   //List tabs = ["完整项目", "跨平台应用", "资源聚合类"];
 
   @override
@@ -26,11 +26,14 @@ class Page extends State<WxArticlePage> with SingleTickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     getItemData();
+
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+   var color= Theme.of(context).primaryColor;
+
     Widget childWidget;
     if (_projectTreeList.length == 0) {
       childWidget = Container(
@@ -38,7 +41,7 @@ class Page extends State<WxArticlePage> with SingleTickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
@@ -55,9 +58,9 @@ class Page extends State<WxArticlePage> with SingleTickerProviderStateMixin {
         child: Scaffold(
           appBar: PreferredSize(
             child: AppBar(
-              backgroundColor: Colors.red,
+              backgroundColor: color,
               title: TabBar(
-                  indicatorColor: Colors.red,
+                  indicatorColor: color,
                   indicatorSize: TabBarIndicatorSize.label,
                   isScrollable: true,
                   labelStyle: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),

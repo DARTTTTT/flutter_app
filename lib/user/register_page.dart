@@ -45,6 +45,8 @@ class Page extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+   var color= Theme.of(context).primaryColor;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -58,7 +60,7 @@ class Page extends State<RegisterPage> {
                   clipper: HeadBottomView(),
                   child: Container(
                     height: 260,
-                    color: Colors.red,
+                    color: color,
                   ),
                 ),
                 Container(
@@ -105,14 +107,14 @@ class Page extends State<RegisterPage> {
                             child: TextField(
                               autofocus: false,
                               controller: textNickController,
-                              cursorColor: Colors.red,
+                              cursorColor: color,
 
                               decoration: InputDecoration(
                                 hintText: "用户名",
                                 border: InputBorder.none,
                                 prefixIcon: Icon(
                                   Icons.perm_identity,
-                                  color: Colors.red,
+                                  color: color,
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
@@ -141,14 +143,14 @@ class Page extends State<RegisterPage> {
                             child: TextField(
                               autofocus: false,
                               controller: textPassController,
-                              cursorColor: Colors.red,
+                              cursorColor: color,
                               obscureText: !obscureNotifier.value,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "密码",
                                 prefixIcon: Icon(
                                   Icons.lock_outline,
-                                  color: Colors.red,
+                                  color: color,
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
@@ -158,7 +160,7 @@ class Page extends State<RegisterPage> {
                                       Icons.remove_red_eye,
                                       size: 18,
                                       color:
-                                          value ? Colors.red : Colors.grey[200],
+                                          value ? color : Colors.grey[200],
                                     ),
                                   ),
                                   onTap: () {
@@ -184,7 +186,7 @@ class Page extends State<RegisterPage> {
                             child: TextField(
                               autofocus: false,
                               controller: textRePassController,
-                              cursorColor: Colors.red,
+                              cursorColor:color,
                               obscureText: !obscureReNotifier.value,
 
                               decoration: InputDecoration(
@@ -192,7 +194,7 @@ class Page extends State<RegisterPage> {
                                 hintText: "确认密码",
                                 prefixIcon: Icon(
                                   Icons.lock_outline,
-                                  color: Colors.red,
+                                  color: color,
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
@@ -202,7 +204,7 @@ class Page extends State<RegisterPage> {
                                       Icons.remove_red_eye,
                                       size: 18,
                                       color:
-                                          value ? Colors.red : Colors.grey[200],
+                                          value ? color : Colors.grey[200],
                                     ),
                                   ),
                                   onTap: () {

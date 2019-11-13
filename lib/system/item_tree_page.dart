@@ -15,20 +15,22 @@ class ItemTreePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    var color=  Theme.of(context).primaryColor;
+
     return DefaultTabController(
       length: treeModel.treeData.children.length,
       initialIndex: index, //跳到指定的页面
       child: Scaffold(
         appBar: PreferredSize(
           child: AppBar(
-            backgroundColor: Colors.red,
+            backgroundColor: color,
             centerTitle: true,
             title: Text(
               treeModel.treeData.name,
               style: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),
             ),
             bottom: TabBar(
-                indicatorColor: Colors.red,
+                indicatorColor: color,
                 indicatorSize: TabBarIndicatorSize.label,
                 isScrollable: true,
                 tabs: List.generate(

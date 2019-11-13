@@ -8,6 +8,8 @@ class Content{
   static const String KEY_USER="user";
   static const String KEY_USER_NAME="user_name";
   static const String KEY_COLLECT_IDS="collect_ids";
+  static const String KEY_THEME_COLOR="key_theme_color";
+
 
 
 }

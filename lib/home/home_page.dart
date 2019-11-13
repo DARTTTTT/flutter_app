@@ -1,4 +1,5 @@
 import 'dart:core';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:news/main.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/user/like_model.dart';
 import 'package:news/utils/net_util.dart';
+
 import 'ItemDetail.dart';
 
 class HomePage extends StatefulWidget {
@@ -41,7 +43,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
   double floatAlpha = 1;
   bool itemType = true;
   List<ArticleDataData> articleDataList;
-
+  var color;
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   Widget layout(BuildContext context) {
     Widget childWidget;
+     color=  Theme.of(context).primaryColor;
 
     if (_items_article.length != 0) {
       childWidget = new Stack(
@@ -98,7 +101,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
               },
               child: RefreshIndicator(
                 onRefresh: _refresh,
-                color: Colors.red,
+                color: color,
                 child: CustomScrollView(
                   slivers: <Widget>[
                     SliverToBoxAdapter(
@@ -131,7 +134,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             child: Container(
               height: MediaQuery.of(context).padding.top + Content.BAR_HEIGHT,
               child: AppBar(
-                backgroundColor: Colors.red,
+                backgroundColor: color,
                 centerTitle: true,
                 actions: <Widget>[
                   IconButton(
@@ -166,7 +169,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                 child: Container(
                     height: 48,
                     child: FloatingActionButton(
-                      backgroundColor: Colors.red,
+                      backgroundColor: color,
                       child: new Icon(Icons.search),
                       onPressed: () {
                         if (floatAlpha == 1) {
@@ -186,7 +189,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color:color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
@@ -362,7 +365,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                               margin: EdgeInsets.only(left: 5),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -377,7 +380,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                               ),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -391,11 +394,11 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
                             child: articleModel.articleDataData.collect
                                 ? Icon(
                                     Icons.favorite,
-                                    color: Colors.red,
+                                    color: color,
                                   )
                                 : Icon(
                                     Icons.favorite_border,
-                                    color: Colors.red,
+                                    color: color,
                                   ),
                             onTap: () {
                               if (articleModel.articleDataData.collect) {
@@ -437,7 +440,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SpinKitFadingCircle(
-                color: Colors.red,
+                color: color,
                 size: 30.0,
               ),
               new Padding(padding: EdgeInsets.only(right: 10)),
@@ -489,7 +492,7 @@ class Page extends State<HomePage> with AutomaticKeepAliveClientMixin {
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(
           color: Colors.grey,
-          activeColor: Colors.red,
+          activeColor:color,
           size: 6.0,
           activeSize: 6.0,
         )),

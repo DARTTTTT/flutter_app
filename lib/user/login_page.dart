@@ -28,12 +28,10 @@ class Page extends State<LoginPage> {
     // TODO: implement initState
     super.initState();
 
-
     setState(() {
-      username=AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
+      username = AppManger.sharedPreferences.getString(Content.KEY_USER_NAME);
       textNickController.text = (username == null ? "" : username);
     });
-
   }
 
   @override
@@ -46,6 +44,9 @@ class Page extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    var color = Theme.of(context).primaryColor;
+    //var accentColor = Theme.of(context).accentColor;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -59,7 +60,7 @@ class Page extends State<LoginPage> {
                   clipper: HeadBottomView(),
                   child: Container(
                     height: 260,
-                    color: Colors.red,
+                    color: color,
                   ),
                 ),
                 Container(
@@ -91,7 +92,7 @@ class Page extends State<LoginPage> {
                       shape: BoxShape.rectangle,
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.red[50],
+                            color: color,
                             offset: Offset(1.0, 1.0),
                             blurRadius: 10.0,
                             spreadRadius: 3.0),
@@ -106,14 +107,14 @@ class Page extends State<LoginPage> {
                             child: TextField(
                               autofocus: false,
                               controller: textNickController,
-                              cursorColor: Colors.red,
+                              cursorColor: color,
 
                               decoration: InputDecoration(
                                 hintText: "用户名",
                                 border: InputBorder.none,
                                 prefixIcon: Icon(
                                   Icons.perm_identity,
-                                  color: Colors.red,
+                                  color: color,
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
@@ -142,7 +143,7 @@ class Page extends State<LoginPage> {
                             child: TextField(
                               autofocus: false,
                               controller: textPassController,
-                              cursorColor: Colors.red,
+                              cursorColor: color,
                               obscureText: !obscureNotifier.value,
 
                               decoration: InputDecoration(
@@ -150,7 +151,7 @@ class Page extends State<LoginPage> {
                                 hintText: "密码",
                                 prefixIcon: Icon(
                                   Icons.lock_outline,
-                                  color: Colors.red,
+                                  color: color,
                                   size: 18,
                                 ),
                                 suffixIcon: InkWell(
@@ -160,7 +161,7 @@ class Page extends State<LoginPage> {
                                       Icons.remove_red_eye,
                                       size: 18,
                                       color:
-                                          value ? Colors.red : Colors.grey[200],
+                                          value ? color : Colors.grey[200],
                                     ),
                                   ),
                                   onTap: () {
@@ -181,7 +182,6 @@ class Page extends State<LoginPage> {
                                     bottom: BorderSide(
                                         color: Colors.grey[200], width: 0.5))),
                           ),
-
                           LoginButton(textNickController, textPassController),
                           Container(
                             width: double.infinity,
@@ -199,7 +199,7 @@ class Page extends State<LoginPage> {
                                     TextSpan(
                                         text: "去注册",
                                         style: TextStyle(
-                                            color: Colors.red, fontSize: 13))
+                                            color: color, fontSize: 13))
                                   ]))
                                 ],
                               ),
@@ -225,9 +225,6 @@ class Page extends State<LoginPage> {
       ),
     );
   }
-
-
-
 }
 
 class LoginButton extends StatelessWidget {
@@ -247,24 +244,25 @@ class LoginButton extends StatelessWidget {
                 "登录",
                 style: TextStyle(fontSize: 15, color: Colors.white),
               ),
-        onPressed: loginModel.busy?null:() {
-          if (nameController.text == "") {
-              showToast("请输入账号");
-          } else if (passwordController.text == "") {
-            showToast("请输入密码");
-          } else {
-            loginModel.login(nameController.text, passwordController.text)
-                .then((value) {
-              if (value) {
-                showToast("登录成功");
-                Navigator.of(context).pop(true);
-              } else {
-                showToast("登录失败");
-              }
-            });
-          }
-        });
+        onPressed: loginModel.busy
+            ? null
+            : () {
+                if (nameController.text == "") {
+                  showToast("请输入账号");
+                } else if (passwordController.text == "") {
+                  showToast("请输入密码");
+                } else {
+                  loginModel
+                      .login(nameController.text, passwordController.text)
+                      .then((value) {
+                    if (value) {
+                      showToast("登录成功");
+                      Navigator.of(context).pop(true);
+                    } else {
+                      showToast("登录失败");
+                    }
+                  });
+                }
+              });
   }
 }
-
-

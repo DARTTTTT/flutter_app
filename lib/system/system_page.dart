@@ -23,16 +23,17 @@ class Page extends State<SystemPage> {
 
   @override
   Widget build(BuildContext context) {
+    var color=Theme.of(context).primaryColor;
     // TODO: implement build
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
           child: AppBar(
-            backgroundColor: Colors.red,
+            backgroundColor: color,
             centerTitle: true,
             title: TabBar(
-                indicatorColor: Colors.red,
+                indicatorColor: color,
                 indicatorSize: TabBarIndicatorSize.label,
                 isScrollable: true,
                 labelStyle: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),

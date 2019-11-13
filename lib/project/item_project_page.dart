@@ -40,6 +40,8 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
 
   double appBarAlpha = 0;
 
+  var color;
+
   @override
   void initState() {
     super.initState();
@@ -58,6 +60,8 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
 
       }
     });
+
+
   }
 
   @override
@@ -73,6 +77,8 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget layout(BuildContext context) {
+    color=  Theme.of(context).primaryColor;
+
     Widget childWidget;
     if (_items_article.length != 0) {
       childWidget = new Stack(
@@ -82,7 +88,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
             context: context,
             child: RefreshIndicator(
               onRefresh: _refresh,
-              color: Colors.red,
+              color: color,
               child: CustomScrollView(
                 slivers: <Widget>[
                   SliverFixedExtentList(
@@ -104,7 +110,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
@@ -280,7 +286,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                               margin: EdgeInsets.only(left: 5),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color: color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -295,7 +301,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                               ),
                               decoration: BoxDecoration(
                                 border: new Border.all(
-                                    color: Colors.red, width: 0.5),
+                                    color:color, width: 0.5),
                                 shape: BoxShape.rectangle,
                                 borderRadius: new BorderRadius.circular(3.0),
                               ),
@@ -309,11 +315,11 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
                             child: articleModel.articleDataData.collect
                                 ? Icon(
                               Icons.favorite,
-                              color: Colors.red,
+                              color: color,
                             )
                                 : Icon(
                               Icons.favorite_border,
-                              color: Colors.red,
+                              color:color,
                             ),
                             onTap: () {
                               print(articleModel.articleDataData.collect);
@@ -355,7 +361,7 @@ class Page extends State<ProjectItemPage> with AutomaticKeepAliveClientMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SpinKitFadingCircle(
-                color: Colors.red,
+                color: color,
                 size: 30.0,
               ),
               new Padding(padding: EdgeInsets.only(right: 10)),

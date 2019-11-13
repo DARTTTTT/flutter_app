@@ -31,6 +31,8 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+  var color=  Theme.of(context).primaryColor;
+
     Widget childWidget;
     if (_projectTreeList.length == 0) {
       childWidget = Container(
@@ -38,7 +40,7 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
@@ -55,9 +57,9 @@ class Page extends State<ProjectPage> with SingleTickerProviderStateMixin {
         child: Scaffold(
           appBar: PreferredSize(
             child: AppBar(
-              backgroundColor: Colors.red,
+              backgroundColor: color,
               title: TabBar(
-                  indicatorColor: Colors.red,
+                  indicatorColor: color,
                   indicatorSize: TabBarIndicatorSize.label,
                   isScrollable: true,
                   labelStyle: TextStyle(fontSize: Content.TEXT_TITLE_SIZE),

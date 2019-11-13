@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news/config/manger.dart';
+import 'package:news/entity/Content.dart';
 import 'package:news/home/home_page.dart';
 import 'package:news/index/keep_state.dart';
+import 'package:news/model/theme_model.dart';
 import 'package:news/my/my.dart';
 import 'package:news/project/project_page.dart';
 import 'package:news/system/system_page.dart';
 import 'package:news/wxarticle/wx_article_page.dart';
+import 'package:oktoast/oktoast.dart';
+
+import '../main.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -13,6 +19,12 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final items = [
     BottomNavigationBarItem(icon: Icon(Icons.tag_faces), title: Text("首页")),
     BottomNavigationBarItem(
@@ -57,12 +69,14 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    var color = Theme.of(context).primaryColor;
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: items,
         currentIndex: currentIndex,
         onTap: onTap,
-        fixedColor: Colors.red,
+        fixedColor: color,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 13.0,
         unselectedFontSize: 13.0,

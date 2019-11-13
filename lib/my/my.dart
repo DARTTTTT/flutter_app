@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news/config/manger.dart';
+import 'package:news/entity/Content.dart';
 import 'package:news/model/login_model.dart';
+import 'package:news/model/theme_model.dart';
 import 'package:news/user/like_page.dart';
 import 'package:news/user/login_page.dart';
 import 'package:news/view/head_bottom_view.dart';
@@ -16,10 +19,18 @@ class MyPage extends StatefulWidget {
 }
 
 class Page extends State<MyPage> {
+  String colorKey;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+
+
+
+
+
   }
 
   @override
@@ -29,12 +40,16 @@ class Page extends State<MyPage> {
     var loginModel = Provider.of<LoginModel>(context);
     debugPrint("是否登录: " + loginModel.hasUserEntity.toString());
 
+
+    var color=Theme.of(context).primaryColor;
+
+
     return Scaffold(
         body: CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
           actions: <Widget>[],
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).backgroundColor,
           expandedHeight: 200 + MediaQuery.of(context).padding.top,
           flexibleSpace: ClipPath(
             child: Stack(
@@ -44,7 +59,7 @@ class Page extends State<MyPage> {
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           //渐变色
-                          colors: [Colors.red, Colors.red],
+                          colors: [color, color],
                           //  blue deepOrangeAccent
                           begin: Alignment.centerRight,
                           //起点
@@ -114,18 +129,17 @@ class Page extends State<MyPage> {
               title: Text("收藏"),
               onTap: () {
                 if (loginModel.hasUserEntity) {
-                  Navigator.push(context, new CupertinoPageRoute(builder: (context)=>LikePage()));
+                  Navigator.push(context,
+                      new CupertinoPageRoute(builder: (context) => LikePage()));
                 } else {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => LoginPage()));
+                  Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => LoginPage()));
                 }
                 // Navigator.of(context).pushNamed(RouteName.favouriteList);
               },
               leading: Icon(
                 Icons.favorite_border,
-                color: Colors.red,
+                color: color,
               ),
               trailing: Icon(Icons.chevron_right),
             ),
@@ -136,18 +150,21 @@ class Page extends State<MyPage> {
               },
               leading: Icon(
                 Icons.info_outline,
-                color: Colors.red,
+                color: color,
               ),
               trailing: Icon(Icons.chevron_right),
             ),
+          SettingThemeWidget(),
             ListTile(
               title: Text("设置"),
               onTap: () {
+              //  AppManger.sharedPreferences.setString(Content.KEY_THEME_COLOR, key);
+
                 //    Navigator.pushNamed(context, RouteName.setting);
               },
               leading: Icon(
                 Icons.settings,
-                color: Colors.red,
+                color: color,
               ),
               trailing: Icon(Icons.chevron_right),
             ),
@@ -162,7 +179,7 @@ class Page extends State<MyPage> {
                       },
                       leading: Icon(
                         Icons.exit_to_app,
-                        color: Colors.red,
+                        color: color,
                       ),
                       trailing: Icon(Icons.chevron_right),
                     ),
@@ -174,5 +191,67 @@ class Page extends State<MyPage> {
         ),
       ],
     ));
+  }
+}
+class SettingThemeWidget extends StatelessWidget {
+  SettingThemeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text("主题"),
+      leading: Icon(
+        Icons.color_lens,
+        color: Theme.of(context).accentColor,
+      ),
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: <Widget>[
+              ...Colors.primaries.map((color) {
+                return Material(
+                  color: color,
+                  child: InkWell(
+                    onTap: ( ) {
+                      Provider.of<ThemeModel>(context).setTheme(color);
+                      AppManger.sharedPreferences.setString(Content.KEY_THEME_COLOR, color.toString());
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                );
+              }).toList(),
+              Material(
+                child: InkWell(
+                  onTap: () {
+
+                    Provider.of<ThemeModel>(context).setRandomTheme();
+
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border:
+                        Border.all(color: Theme.of(context).accentColor)),
+                    width: 40,
+                    height: 40,
+                    child: Text(
+                      "?",
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).accentColor),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

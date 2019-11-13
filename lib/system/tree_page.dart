@@ -28,7 +28,7 @@ class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+    var color = Theme.of(context).primaryColor;
     Widget childWidget;
     if (treeList.length == 0) {
       childWidget = Container(
@@ -36,7 +36,7 @@ class Page extends State<TreePage> with AutomaticKeepAliveClientMixin {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SpinKitFadingCircle(
-              color: Colors.red,
+              color: color,
               size: 30.0,
             ),
             new Padding(padding: EdgeInsets.only(top: 10)),
