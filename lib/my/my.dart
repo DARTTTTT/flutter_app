@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news/config/manger.dart';
-import 'package:news/entity/Content.dart';
 import 'package:news/model/login_model.dart';
 import 'package:news/model/theme_model.dart';
 import 'package:news/user/like_page.dart';
@@ -217,7 +215,8 @@ class SettingThemeWidget extends StatelessWidget {
                   child: InkWell(
                     onTap: ( ) {
                       Provider.of<ThemeModel>(context).setTheme(color);
-                      AppManger.sharedPreferences.setString(Content.KEY_THEME_COLOR, color.toString());
+
+                      ThemeModel().saveThemeColor(color);
                     },
                     child: Container(
                       width: 40,
@@ -229,9 +228,7 @@ class SettingThemeWidget extends StatelessWidget {
               Material(
                 child: InkWell(
                   onTap: () {
-
                     Provider.of<ThemeModel>(context).setRandomTheme();
-
                   },
                   child: Container(
                     alignment: Alignment.center,

@@ -16,10 +16,13 @@ void main() async {
   Provider.debugCheckInvalidValueType = null;
   await AppManger.init();
 
+
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
 
 
   @override

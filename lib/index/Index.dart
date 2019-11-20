@@ -9,7 +9,6 @@ import 'package:news/my/my.dart';
 import 'package:news/project/project_page.dart';
 import 'package:news/system/system_page.dart';
 import 'package:news/wxarticle/wx_article_page.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../main.dart';
 
@@ -19,6 +18,9 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -70,6 +72,8 @@ class _IndexState extends State<Index> {
   Widget build(BuildContext context) {
     // TODO: implement build
     var color = Theme.of(context).primaryColor;
+
+
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
